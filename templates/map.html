@@ -8,6 +8,9 @@
     <!-- Leaflet CSS -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
     <link rel="stylesheet" href="static/styles.css" />
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
 
 
     <style>
@@ -171,7 +174,28 @@
             var d = R * c; // Distance in km
             return d;
         }
+        L.marker([bathroom.latitude, bathroom.longitude])
+            .addTo(map)
+            .on('click', () => {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    const userLat = position.coords.latitude;
+                    const userLng = position.coords.longitude;
+
+                    L.Routing.control({
+                        waypoints: [
+                            L.latLng(userLat, userLng),
+                            L.latLng(bathroom.latitude, bathroom.longitude)
+                        ],
+                        routeWhileDragging: false
+                    }).addTo(map);
+                });
+            });
+            
+
     </script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+
 </body>
 
 </html>
