@@ -5,11 +5,8 @@
     <title>Map View</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Leaflet CSS -->
-    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
+
     <link rel="stylesheet" href="static/styles.css" />
-
-
     <style>
         #map {
             height: 500px;
@@ -35,11 +32,6 @@
 </head>
 
 <body>
-    <!-- <div class="container">
-        <h1>Map View</h1>
-        <div id="map"></div>
-    </div> -->
-
     <div class="container">
         <h1>Map View</h1>
         <a href="{{ url_for('home') }}"
@@ -48,62 +40,68 @@
         <div id="map"></div>
     </div>
 
-    <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
-        var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16); // UCI campus
+        var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
+
         var myIcon = L.icon({
             iconUrl: 'static/images/tampon_icon.png',
             iconSize: [40, 70],
             iconAnchor: [22, 94],
-            popupAnchor: [-3, -76],
-            // shadowUrl: 'my-icon-shadow.png',
-            // shadowSize: [68, 95],
-            // shadowAnchor: [22, 94]
+            popupAnchor: [-3, -76]
         });
+
         var userIcon = L.icon({
             iconUrl: 'static/images/Woman_icon.png',
             iconSize: [30, 50],
             iconAnchor: [22, 94],
-            popupAnchor: [-3, -76],
-            // shadowUrl: 'my-icon-shadow.png',
-            // shadowSize: [68, 95],
-            // shadowAnchor: [22, 94]
+            popupAnchor: [-3, -76]
         });
-
-        // L.marker([50.505, 30.57], { icon: myIcon }).addTo(map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        // L.marker([33.64252877591157, -117.84161569140684])
-        //     .addTo(map)
-        //     .bindPopup('UCI Campus')
-        //     .openPopup();
-        fetch('/static/bathrooms.json')
+
+        //get from database (no more json)
+        fetch('/locations')
             .then(response => response.json())
             .then(data => {
-                data.forEach(bathroom => {
-                    L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
-                        .addTo(map)
-                        .bindPopup(`<strong>${bathroom.name}</strong><head>
-</head>
-<body>
-    <a href="#popup" style="padding: 5px 10px; background-color: #007BFF; 
-                            color: #fff; text-decoration: none; border-radius: 5px;">Details</a>
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <h2>${bathroom.name}</h2>
-            <p>${bathroom.availability}</p >
-                        <a href="#" style="display: inline-block; margin-top: 10px; padding:
-                               5px 10px; background-color: #c90076; color: #fff; text-decoration:
-                               none; border-radius: 3px;">Close</a>
-        </div >
-    </div >
-</body >`);
-                });
-            });
-        // get users current location
+                data.forEach(location => {
+                    const popupContent = (loc) => `
+                    <div id="view-${loc.id}">
+                        <strong>${loc.name}</strong><br>
+                        Pads Availability: ${loc.pads_availability}<br>
+                        Tampons Availability: ${loc.tampons_availability}<br>
+                        Free: ${loc.free}<br>
+                        Accessible: ${loc.accessibility ? "Yes" : "No"}<br>
+                        Last Updated: ${loc.last_updated}<br>
+                        <button onclick="showEditForm(${loc.id})">Update Stock</button>
+                    </div>
+                    <div id="edit-${loc.id}" style="display:none;">
+                        <label for="pads-${loc.id}">Pads:</label>
+                        <select id="pads-${loc.id}">
+                            <option value="Low" ${loc.pads_availability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${loc.pads_availability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${loc.pads_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+                        <label for="tampons-${loc.id}">Tampons:</label>
+                        <select id="tampons-${loc.id}">
+                            <option value="Low" ${loc.tampons_availability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${loc.tampons_availability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${loc.tampons_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+                        <button onclick="submitUpdate(${loc.id})">Submit</button>
+                        <button onclick="cancelEdit(${loc.id})">Back</button>
+                    </div>
+                `;
+
+                const marker = L.marker([location.latitude, location.longitude], { icon: myIcon })
+                    .addTo(map)
+                    .bindPopup(popupContent(location));
+                            });
+        });
+
+        //show user location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
                 var userLat = position.coords.latitude;
@@ -119,6 +117,39 @@
         } else {
             alert('Geolocation is not supported by this browser.');
         }
+
+    function showEditForm(id) {
+        document.getElementById(`view-${id}`).style.display = 'none';
+        document.getElementById(`edit-${id}`).style.display = 'block';
+    }
+
+    function cancelEdit(id) {
+        document.getElementById(`edit-${id}`).style.display = 'none';
+        document.getElementById(`view-${id}`).style.display = 'block';
+    }
+
+    function submitUpdate(id) {
+        const pads = document.getElementById(`pads-${id}`).value;
+        const tampons = document.getElementById(`tampons-${id}`).value;
+
+        fetch(`/update_stock/${id}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                pads_availability: pads,
+                tampons_availability: tampons
+            })
+        })
+        .then(response => response.json())
+        .then(result => {
+            if (result.success) {
+                location.reload(); 
+            } else {
+                alert('Update failed.');
+            }
+        });
+    }
+
     </script>
 </body>
 
