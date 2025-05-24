@@ -49,7 +49,18 @@
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
         // var map = L.map('map').setView([34.0522, -118.2437], 13); // Example: Los Angeles
-        var map = L.map('map').setView([33.64252877591157, -117.84161569140684], 16); // UCI campus
+        var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16); // UCI campus
+        var myIcon = L.icon({
+            iconUrl: 'static/images/tampon_icon.png',
+            iconSize: [38, 95],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76],
+            // shadowUrl: 'my-icon-shadow.png',
+            // shadowSize: [68, 95],
+            // shadowAnchor: [22, 94]
+        });
+
+        // L.marker([50.505, 30.57], { icon: myIcon }).addTo(map);
 
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
@@ -62,7 +73,7 @@
             .then(response => response.json())
             .then(data => {
                 data.forEach(bathroom => {
-                    L.marker([bathroom.latitude, bathroom.longitude])
+                    L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
                         .addTo(map)
                         .bindPopup(`<strong>${bathroom.name}</strong>`);
                 });
