@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Map View</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map {
+            height: 500px;
+            width: 100%;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #ffffff;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- <div class="container">
+        <h1>Map View</h1>
+        <div id="map"></div>
+    </div> -->
+
+    <div class="container">
+        <h1>Map View</h1>
+        <a href="{{ url_for('home') }}"
+            style="display:inline-block;padding:10px 20px;background:#2c3e50;color:#fff;text-decoration:none;border-radius:5px;margin-bottom:20px;">Back
+            to Home</a>
+        <div id="map"></div>
+    </div>
+
+    <!-- Leaflet JS -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        // var map = L.map('map').setView([34.0522, -118.2437], 13); // Example: Los Angeles
+        var map = L.map('map').setView([33.64252877591157, -117.84161569140684], 16); // UCI campus
+
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+        // L.marker([33.64252877591157, -117.84161569140684])
+        //     .addTo(map)
+        //     .bindPopup('UCI Campus')
+        //     .openPopup();
+        fetch('/static/bathrooms.json')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(bathroom => {
+                    L.marker([bathroom.latitude, bathroom.longitude])
+                        .addTo(map)
+                        .bindPopup(`<strong>${bathroom.name}</strong>`);
+                });
+            });
+
+    </script>
+</body>
+
+</html>
