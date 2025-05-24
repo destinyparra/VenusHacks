@@ -12,6 +12,7 @@
             max-width: 800px;
             margin: 0 auto;
             padding: 2rem;
+            text-align: center;
         }
 
         h1 {
@@ -24,6 +25,17 @@
             text-align: center;
             font-size: 1.1rem;
         }
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background: #800080;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+       
     </style>
 </head>
 
@@ -34,11 +46,18 @@
     </div> -->
     <div class="container">
         <h1>Auntie Flows Crimson Compass</h1>
-        <p>LOCATE PERIOD ITEMS NOW</p>
-        <a href="{{ url_for('map_view') }}"
+        <p>LOCATE MENSTRUAL PRODUCTS NEAR YOU NOW</p>
+        <!-- <a href="{{ url_for('map_view') }}"
             style="display:inline-block;padding:10px 20px;background:#800080;color:#fff;text-decoration:none;border-radius:5px;margin-top:20px;">Go
-            to Map</a>
+            to Map</a> -->
+        <a href="{{ url_for('map_view') }}" class="button">Go to Map</a>
+
+        
     </div>
+
+    
+
+
 
 </body>
 
