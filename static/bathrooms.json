@@ -1,10 +1,12 @@
 [
     {
+        "id": 1,
         "name": "Schneiderman Lecture Hall - 1st Floor",
         "latitude": 33.64577309831407,
         "longitude": -117.84474355312838
     },
     {
+        "id": 2,
         "name": "Schneiderman Lecture Hall - 2nd Floor",
         "latitude": 33.64577309831407,
         "longitude": -117.84474355312838
