@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Period Product Tracker</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background-color: #fff8fa;
+      margin: 0;
+      padding: 0;
+      color: #2c3e50;
+    }
+
+    /* 🔝 Navigation Bar */
+    .navbar {
+      background-color: #800080;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .navbar .logo {
+      font-size: 1.5rem;
+      font-weight: bold;
+    }
+
+    .navbar .nav-links a {
+      color: white;
+      text-decoration: none;
+      margin-left: 1.5rem;
+      font-size: 1rem;
+    }
+
+    .navbar .nav-links a:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 3rem 1.5rem;
+      text-align: center;
+    }
+
+    h1 {
+      color: #800080;
+      font-size: 2.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    p.subtitle {
+      font-size: 1.25rem;
+      margin-bottom: 2rem;
+      color: #c10087;
+    }
+
+    .cta-button {
+      display: inline-block;
+      background: linear-gradient(90deg, #c10087, #800080);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      text-decoration: none;
+      font-weight: bold;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      transition: background 0.3s ease;
+    }
+
+    .cta-button:hover {
+      background: linear-gradient(90deg, #a00070, #5a005a);
+    }
+
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-top: 3rem;
+    }
+
+    .feature-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      padding: 1.5rem;
+      width: 250px;
+    }
+
+    .feature-card h3 {
+      color: #800080;
+      margin-bottom: 0.5rem;
+    }
+
+    .feature-card p {
+      font-size: 0.95rem;
+      color: #555;
+    }
+
+    @media (max-width: 768px) {
+      .features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .navbar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .navbar .nav-links {
+        margin-top: 0.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- 🔝 Nav Bar -->
+  <header class="navbar">
+    <div class="logo">🩸 Auntie Flow</div>
+    <nav class="nav-links">
+      <a href="#">Home</a>
+      <a href="{{ url_for('map_view') }}">Map</a>
+      <a href="#">Report</a>
+      <a href="#">Contact</a>
+    </nav>
+  </header>
+
+  <!-- 🧭 Main Section -->
+  <div class="container">
+    <h1>Auntie Flow Crimson Red</h1>
+    <p class="subtitle">Track period product availability in real time at UCI</p>
+    <a href="{{ url_for('map_view') }}" class="cta-button">🗺️ Go to Map</a>
+
+    <div class="features">
+      <div class="feature-card">
+        <h3>📍 Real-Time Tracker</h3>
+        <p>See which restrooms have pads and tampons stocked near you.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🔔 Community Alerts</h3>
+        <p>Help others by reporting low or empty product stations anonymously.</p>
+      </div>
+      <div class="feature-card">
+        <h3>🧹 Notify Janitors</h3>
+        <p>Send refill alerts directly to UCI janitorial staff with one tap.</p>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
