@@ -23,9 +23,40 @@
 }
 
 
+.availability-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px;
+    vertical-align: middle;
+}
 
+.avail-many {
+    background: #28a745;
+}
 
+/* green */
+.avail-low {
+    background: #ffc107;
+}
 
+/* orange */
+.avail-none {
+    background: #dc3545;
+}
+
+/* red */
+.report-btn {
+    margin-left: 10px;
+    padding: 4px 10px;
+    background: #c90076;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
 
 
 /* required styles */

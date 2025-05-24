@@ -114,34 +114,49 @@
                     // Add click event to update popup content with distance
                     marker.on('click', function () {
                         let popupContent = `<strong>${bathroom.name}</strong>`;
+
+                        // Determine indicator color class
+                        let availClass = '';
+                        let availText = '';
+                        if (bathroom.availability === 'many') {
+                            availClass = 'avail-many';
+                            availText = 'Many items available';
+                        } else if (bathroom.availability === 'low') {
+                            availClass = 'avail-low';
+                            availText = 'Low supply';
+                        } else {
+                            availClass = 'avail-none';
+                            availText = 'None available';
+                        }
+
+                        popupContent += `<br>
+    <span class="availability-indicator ${availClass}"></span>
+    <span>${availText}</span>
+    <button class="report-btn" data-id="${bathroom.id}" data-name="${bathroom.name}">Report Update</button>
+`;
+
                         if (userLat !== null && userLng !== null) {
                             const distKm = getDistanceFromLatLonInKm(userLat, userLng, bathroom.latitude, bathroom.longitude);
                             const distMiles = (distKm * 0.621371);
-                            const walkTimeMin = Math.round((distMiles / 3.1) * 60); // 5 km/h walking speed
-                            popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distKm.toFixed(2)} mi)</span>`;
+                            const walkTimeMin = Math.round((distMiles / 3.1) * 60);
+                            popupContent += `<br><span>Estimated walk: 🚶‍♀️${walkTimeMin} min 📍${distMiles.toFixed(2)} mi</span>`;
                         } else {
                             popupContent += `<br><span>Enable location to see walking time.</span>`;
                         }
-                        marker.bindPopup(popupContent).openPopup();
+
+                        marker.setPopupContent(popupContent);
+                        marker.openPopup();
                     });
                 });
             });
-        // // get users current location
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(function (position) {
-        //         var userLat = position.coords.latitude;
-        //         var userLng = position.coords.longitude;
-        //         L.marker([userLat, userLng], { icon: userIcon })
-        //             .addTo(map)
-        //             .bindPopup('You are here')
-        //             .openPopup();
-        //         map.setView([userLat, userLng], 16);
-        //     }, function () {
-        //         alert('Geolocation failed. Please allow location access.');
-        //     });
-        // } else {
-        //     alert('Geolocation is not supported by this browser.');
-        // }
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('report-btn')) {
+                const bathroomName = event.target.getAttribute('data-name');
+                alert('Report update requested for bathroom: ' + bathroomName);
+                // Add your reporting logic here
+            }
+        });
+
 
         // Calculate distance in kilometers between two lat/lng points
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
