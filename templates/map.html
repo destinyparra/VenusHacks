@@ -80,34 +80,14 @@
         //     .addTo(map)
         //     .bindPopup('UCI Campus')
         //     .openPopup();
-        fetch('/static/bathrooms.json')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(bathroom => {
-                    L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
-                        .addTo(map)
-                        .bindPopup(`<strong>${bathroom.name}</strong><head>
-</head>
-<body>
-    <a href="#popup" style="padding: 5px 10px; background-color: #007BFF; 
-                            color: #fff; text-decoration: none; border-radius: 5px;">Details</a>
-    <div id="popup" class="popup">
-        <div class="popup-content">
-            <h2>${bathroom.name}</h2>
-            <p>${bathroom.availability}</p >
-                        <a href="#" style="display: inline-block; margin-top: 10px; padding:
-                               5px 10px; background-color: #c90076; color: #fff; text-decoration:
-                               none; border-radius: 3px;">Close</a>
-        </div >
-    </div >
-</body >`);
-                });
-            });
-        // get users current location
+        let userLat = null;
+        let userLng = null;
+
+        // Get user's current location first
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                var userLat = position.coords.latitude;
-                var userLng = position.coords.longitude;
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
                 L.marker([userLat, userLng], { icon: userIcon })
                     .addTo(map)
                     .bindPopup('You are here')
@@ -118,6 +98,63 @@
             });
         } else {
             alert('Geolocation is not supported by this browser.');
+        }
+
+        fetch('/static/bathrooms.json')
+            .then(response => response.json())
+            .then(data => {
+                data.forEach(bathroom => {
+                    const marker = L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
+                        .addTo(map);
+
+                    // set inital popup content
+                    let popupContent = `<strong>${bathroom.name}</strong>`;
+                    marker.bindPopup(popupContent);
+
+                    // Add click event to update popup content with distance
+                    marker.on('click', function () {
+                        let popupContent = `<strong>${bathroom.name}</strong>`;
+                        if (userLat !== null && userLng !== null) {
+                            const distKm = getDistanceFromLatLonInKm(userLat, userLng, bathroom.latitude, bathroom.longitude);
+                            const distMiles = (distKm * 0.621371);
+                            const walkTimeMin = Math.round((distMiles / 3.1) * 60); // 5 km/h walking speed
+                            popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distKm.toFixed(2)} mi)</span>`;
+                        } else {
+                            popupContent += `<br><span>Enable location to see walking time.</span>`;
+                        }
+                        marker.bindPopup(popupContent).openPopup();
+                    });
+                });
+            });
+        // // get users current location
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(function (position) {
+        //         var userLat = position.coords.latitude;
+        //         var userLng = position.coords.longitude;
+        //         L.marker([userLat, userLng], { icon: userIcon })
+        //             .addTo(map)
+        //             .bindPopup('You are here')
+        //             .openPopup();
+        //         map.setView([userLat, userLng], 16);
+        //     }, function () {
+        //         alert('Geolocation failed. Please allow location access.');
+        //     });
+        // } else {
+        //     alert('Geolocation is not supported by this browser.');
+        // }
+
+        // Calculate distance in kilometers between two lat/lng points
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the earth in km
+            var dLat = (lat2 - lat1) * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c; // Distance in km
+            return d;
         }
     </script>
 </body>
