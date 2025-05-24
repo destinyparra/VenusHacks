@@ -10,5 +10,163 @@
         "name": "Schneiderman Lecture Hall - 2nd Floor",
         "latitude": 33.64577309831407,
         "longitude": -117.84474355312838
+    },
+
+    {
+        "id": 3,
+        "name": "Aldrich Hall - basement",
+        "latitude": 33.64841625857725,
+        "longitude": -117.84122708476183
+    },
+    {
+        "id": 4,
+        "name": "Aldrich Hall - 2nd floor, 214",
+        "latitude": 33.64841625857725,
+        "longitude": -117.84122708476183
+    },
+    {
+        "id": 5,
+        "name": "Aldrich Hall - 2nd floor, 216",
+        "latitude": 33.64841625857725,
+        "longitude": -117.84122708476183
+    },
+    {
+        "id": 6,
+        "name": "Aldrich Hall - 6th floor, 601",
+        "latitude": 33.64841625857725,
+        "longitude": -117.84122708476183
+    },
+    {
+        "id": 7,
+        "name": "Aldrich Hall - 6th floor, 604",
+        "latitude": 33.64841625857725,
+        "longitude": -117.84122708476183
+    },
+    {
+        "id": 8,
+        "name": "Anteater Learning Pavilion - 1st Floor",
+        "latitude": 33.647189306833425,
+        "longitude": -117.84462947326799
+    },
+    {
+        "id": 9,
+        "name": "Anteater Learning Pavilion - 2nd Floor",
+        "latitude": 33.647189306833425,
+        "longitude": -117.84462947326799
+    },
+    {
+        "id": 10,
+        "name": "Anteater Learning Pavilion - 3rd Floor",
+        "latitude": 33.647189306833425,
+        "longitude": -117.84462947326799
+    },
+    {
+        "id": 11,
+        "name": "Biological Sciences III - Basement",
+        "latitude": 33.64552858342245,
+        "longitude": -117.84571966652165
+    },
+    {
+        "id": 12,
+        "name": "Biological Sciences III - Level 1",
+        "latitude": 33.64552858342245,
+        "longitude": -117.84571966652165
+    },
+    {
+        "id": 13,
+        "name": "Anteater Recreation Center - 1st floor, 104",
+        "latitude": 33.643655696764164,
+        "longitude": -117.82791864570751
+    },
+    {
+        "id": 14,
+        "name": "Anteater Recreation Center - 1st floor, 105",
+        "latitude": 33.643655696764164,
+        "longitude": -117.82791864570751
+    },
+    {
+        "id": 15,
+        "name": "Anteater Recreation Center - 2nd floor, 272",
+        "latitude": 33.643655696764164,
+        "longitude": -117.82791864570751
+    },
+    {
+        "id": 16,
+        "name": "Anteater Recreation Center - 2nd floor, 275",
+        "latitude": 33.643655696764164,
+        "longitude": -117.82791864570751
+    },
+    {
+        "id": 17,
+        "name": "Croul Hall - Basement",
+        "latitude": 33.644081715171126,
+        "longitude": -117.84440389720663
+    },
+    {
+        "id": 18,
+        "name": "Gateway Student Center - Level 2",
+        "latitude": 33.64767121950974,
+        "longitude": -117.84169333278857
+    },
+    {
+        "id": 19,
+        "name": "Science Library - Level 2",
+        "latitude": 33.64603633401851,
+        "longitude": -117.84650426652153
+    },
+    {
+        "id": 20,
+        "name": "Science Library - Level 4",
+        "latitude": 33.64603633401851,
+        "longitude": -117.84650426652153
+    },
+    {
+        "id": 21,
+        "name": "Science Library - Level 5",
+        "latitude": 33.64603633401851,
+        "longitude": -117.84650426652153
+    },
+    {
+        "id": 22,
+        "name": "Science Library - Level 6",
+        "latitude": 33.64603633401851,
+        "longitude": -117.84650426652153
+    },
+    {
+        "id": 23,
+        "name": "Langson Library - Basement",
+        "latitude": 33.64735926344708,
+        "longitude": -117.84117231929555
+    },
+    {
+        "id": 24,
+        "name": "Langson Library - Level 1",
+        "latitude": 33.64735926344708,
+        "longitude": -117.84117231929555
+    },
+    {
+        "id": 25,
+        "name": "Langson Library - Level 2",
+        "latitude": 33.64735926344708,
+        "longitude": -117.84117231929555
+    },
+    {
+        "id": 26,
+        "name": "Langson Library - Level 3",
+        "latitude": 33.64735926344708,
+        "longitude": -117.84117231929555
+    },
+    {
+        "id": 27,
+        "name": "Langson Library - Level 4",
+        "latitude": 33.64735926344708,
+        "longitude": -117.84117231929555
+    },
+    {
+        "id": 28,
+        "name": "Social Ecology I - Level 2",
+        "latitude": 33.64659558357457,
+        "longitude": -117.83877448186402
     }
+
 ]
