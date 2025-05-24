@@ -1,28 +1,12 @@
-from flask import Flask
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 @app.route('/')
 def home():
-    return """
-    <html>
-    <head>
-        <style>
-            body { font-family: Arial, sans-serif; background-color:  #FFFFFF; }
-            .container { max-width: 800px; margin: 0 auto; padding: 2rem; }
-            h1 { color: #2c3e50; text-align: center; }
-            p { color: #800080; text-align: center; font-size: 1.1rem; }
-        </style>
-    </head>
-    <body>
-        <div class="container">
-            <h1>Auntie Flows Crimson Compass</h1>
-            <p>LOCATE PERIOD ITEMS NOW</p>
-        </div>
-    </body>
-    </html>
-    """
+    return render_template('home.html')
 
+# ...existing code...
 @app.route('/map')
 def map_view():
     return """
