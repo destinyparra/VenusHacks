@@ -177,6 +177,7 @@
       <a href="{{ url_for('map_view') }}">Map</a>
       <a href="{{ url_for('map_view') }}#report">Report</a> <!-- ✅ fixed -->
       <a href="#about">About</a>
+      <a href="{{ url_for('resources') }}">Resources</a>
     </div>
   </nav>
 
@@ -200,6 +201,10 @@
       <a href="#contact" class="tile">
         <div class="tile-icon">💬</div>
         <div class="tile-text">Contact Us</div>
+      </a>
+      <a href="{{ url_for('resources') }}" class="tile">
+        <div class="tile-icon">📘</div>
+        <div class="tile-text">Resources</div>
       </a>
     </section>
   </div>
