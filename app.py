@@ -79,5 +79,7 @@ def locations():
     } for loc in all_locations]
     return jsonify(locations_data)
 
+
+
 if __name__ == '__main__':
     app.run(debug=True)
