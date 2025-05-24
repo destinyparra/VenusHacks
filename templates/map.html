@@ -6,7 +6,10 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
+    <link rel="stylesheet" href="static/styles.css" />
+
+
     <style>
         #map {
             height: 500px;
@@ -51,7 +54,7 @@
         var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16); // UCI campus
         var myIcon = L.icon({
             iconUrl: 'static/images/tampon_icon.png',
-            iconSize: [38, 95],
+            iconSize: [40, 70],
             iconAnchor: [22, 94],
             popupAnchor: [-3, -76],
             // shadowUrl: 'my-icon-shadow.png',
@@ -83,7 +86,21 @@
                 data.forEach(bathroom => {
                     L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
                         .addTo(map)
-                        .bindPopup(`<strong>${bathroom.name}</strong>`);
+                        .bindPopup(`<strong>${bathroom.name}</strong><head>
+</head>
+<body>
+    <a href="#popup" style="padding: 5px 10px; background-color: #007BFF; 
+                            color: #fff; text-decoration: none; border-radius: 5px;">Details</a>
+    <div id="popup" class="popup">
+        <div class="popup-content">
+            <h2>${bathroom.name}</h2>
+            <p>${bathroom.availability}</p >
+                        <a href="#" style="display: inline-block; margin-top: 10px; padding:
+                               5px 10px; background-color: #c90076; color: #fff; text-decoration:
+                               none; border-radius: 3px;">Close</a>
+        </div >
+    </div >
+</body >`);
                 });
             });
         // get users current location
