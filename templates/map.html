@@ -6,7 +6,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- <link rel="stylesheet" href="static/styles.css" /> -->
+
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
 </head>
@@ -19,13 +19,12 @@
         <div class="nav-links">
             <a href="{{ url_for('home') }}">Home</a>
             <a href="{{ url_for('map_view') }}">Map</a>
-            <!-- <a href="#about">About</a> -->
             <a href="{{ url_for('home') }}#about">About</a>
             <a href="{{ url_for('resources') }}">Resources</a>
         </div>
     </nav>
 
-    <!-- <div class="container"> -->
+
     <div class="header">
         <h1>
             <span class="emoji">💖</span> Zot Spot <span class="emoji">💖</span>
@@ -43,17 +42,32 @@
         <div id="map"></div>
     </div>
 
-    <!-- <div id="locations-container"></div> -->
 
     <div class="design-card">
         <h2 class="design-title">Bathrooms Near Me</h2>
         <div class="list-layout" id="building-list">
-            <!-- List items will be injected here by JS -->
         </div>
     </div>
     </div>
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
+            var R = 6371; // Radius of the earth in km
+            var dLat = (lat2 - lat1) * Math.PI / 180;
+            var dLon = (lon2 - lon1) * Math.PI / 180;
+            var a =
+                Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+                Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            var d = R * c; // Distance in km
+            return d;
+        }
+        // storing users latitude and longitude
+        // Initialize user location variables
+        let userLat = null;
+        let userLng = null;
+
         var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
         var myIcon = L.icon({
             iconUrl: 'static/images/tampon_icon.png',
@@ -166,25 +180,43 @@
             }
         }
 
+        // function renderView(location) {
+        //     return `
+        //         <div id="view-${location.id}">
+        //             <strong>${location.name}</strong><br>
+        //             Pads: ${location.pads_availability}<br>
+        //             Tampons: ${location.tampons_availability}<br>
+        //             Free: ${location.free ? 'Yes' : 'No'}<br>
+        //             Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
+        //             Last Updated: ${location.last_updated}<br>
+        //             <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
+        //         </div>
+        //         <div id="edit-${location.id}" style="display:none;"></div>`;
+        // }
         function renderView(location) {
+            let distanceStr = '';
+            if (userLat !== null && userLng !== null && location.latitude && location.longitude) {
+                const distKm = getDistanceFromLatLonInKm(userLat, userLng, location.latitude, location.longitude);
+                const distMiles = (distKm * 0.621371).toFixed(2);
+                distanceStr = `<br><strong>Distance:</strong> ${distMiles} mi`;
+            }
             return `
-                <div id="view-${location.id}">
-                    <strong>${location.name}</strong><br>
-                    Pads: ${location.pads_availability}<br>
-                    Tampons: ${location.tampons_availability}<br>
-                    Free: ${location.free ? 'Yes' : 'No'}<br>
-                    Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
-                    Last Updated: ${location.last_updated}<br>
-                    <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
-                </div>
-                <div id="edit-${location.id}" style="display:none;"></div>`;
+        <div id="view-${location.id}">
+            <strong>${location.name}</strong>${distanceStr}<br>
+            Pads: ${location.pads_availability}<br>
+            Tampons: ${location.tampons_availability}<br>
+            Free: ${location.free ? 'Yes' : 'No'}<br>
+            Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
+            Last Updated: ${location.last_updated}<br>
+            <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
+        </div>
+        <div id="edit-${location.id}" style="display:none;"></div>`;
         }
-
         function showEditForm(id, padsAvailability, tamponsAvailability) {
             const viewDiv = document.getElementById(`view-${id}`);
             const editDiv = document.getElementById(`edit-${id}`);
             viewDiv.style.display = 'none';
-            //editDiv.style.display = 'block';
+
 
             editDiv.innerHTML = `
                     <form onsubmit="submitUpdate(event, ${id})">
@@ -238,11 +270,10 @@
                 });
         }
 
-        //show user location
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(function (position) {
-                var userLat = position.coords.latitude;
-                var userLng = position.coords.longitude;
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
                 L.marker([userLat, userLng], { icon: userIcon })
                     .addTo(map)
                     .bindPopup('You are here')
