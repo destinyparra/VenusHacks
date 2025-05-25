@@ -133,6 +133,10 @@ h1 .emoji {
     filter: none;
 }
 
+.leaflet-routing-container {
+    z-index: 999 !important;
+}
+
 /* ------------------------------- */
 /* ---------- HOME PAGE ---------- */
 /* ------------------------------- */

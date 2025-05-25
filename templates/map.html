@@ -9,6 +9,24 @@
 
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
+
+    <!-- Leaflet CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+    <!-- Leaflet JS (must be before Routing Machine JS) -->
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+
+    <!-- Mapbox JS and CSS for Routing Machine -->
+    <script
+        src="https://api.mapbox.com/mapbox.js/plugins/leaflet-routing-machine/v3.2.12/leaflet-routing-mapbox.js"></script>
+
+
 </head>
 
 <body class="map-page">
@@ -49,8 +67,11 @@
         </div>
     </div>
     </div>
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+
+
     <script>
+        let routingControl = null; // Global variable to hold the routing control (this is for pathfinding)
+
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
             var R = 6371; // Radius of the earth in km
             var dLat = (lat2 - lat1) * Math.PI / 180;
@@ -174,44 +195,66 @@
                     const selectedID = select.value;
                     const location = groupLocations.find(l => l.id == selectedID);
                     details.innerHTML = location ? renderView(location) : '';
+                    // Draw route if user location and destination are available
+
+                    if (userLat !== null && userLng !== null && location && location.latitude && location.longitude) {
+                        if (routingControl) {
+                            map.removeControl(routingControl);
+                        }
+                        // routingControl = L.Routing.control({
+                        //     waypoints: [
+                        //         L.latLng(userLat, userLng),
+                        //         L.latLng(location.latitude, location.longitude)
+                        //     ],
+                        //     lineOptions: { addWaypoints: false },
+                        //     routeWhileDragging: false,
+                        //     draggableWaypoints: false,
+                        //     addWaypoints: false,
+                        //     // show: false
+                        // }).addTo(map);
+                        routingControl = L.Routing.control({
+                            waypoints: [
+                                L.latLng(userLat, userLng),
+                                // L.latLng(destLat, destLng)
+                                L.latLng(location.latitude, location.longitude)
+
+                            ],
+                            router: L.Routing.mapbox('API_KEY'),
+                            profile: 'mapbox/walking',
+                            lineOptions: {
+                                styles: [{ color: 'purple', weight: 5 }]
+                            },
+                            routeWhileDragging: false,
+                            draggableWaypoints: false,
+                            addWaypoints: false,
+                            show: false
+
+                        }).addTo(map);
+
+                    }
                 });
 
                 container.appendChild(card);
             }
         }
-
-        // function renderView(location) {
-        //     return `
-        //         <div id="view-${location.id}">
-        //             <strong>${location.name}</strong><br>
-        //             Pads: ${location.pads_availability}<br>
-        //             Tampons: ${location.tampons_availability}<br>
-        //             Free: ${location.free ? 'Yes' : 'No'}<br>
-        //             Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
-        //             Last Updated: ${location.last_updated}<br>
-        //             <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
-        //         </div>
-        //         <div id="edit-${location.id}" style="display:none;"></div>`;
+        // if (userLat !== null && userLng !== null && location.latitude && location.longitude) {
+        //     // Remove old route if it exists
+        //     if (routingControl) {
+        //         map.removeControl(routingControl);
+        //     }
+        //     // Draw new route
+        //     routingControl = L.Routing.control({
+        //         waypoints: [
+        //             L.latLng(userLat, userLng),
+        //             L.latLng(location.latitude, location.longitude)
+        //         ],
+        //         lineOptions: { addWaypoints: false },
+        //         routeWhileDragging: false,
+        //         draggableWaypoints: false,
+        //         addWaypoints: false,
+        //         show: false
+        //     }).addTo(map);
         // }
-
-        // if (userLat !== null && userLng !== null) {
-        //     const distKm = getDistanceFromLatLonInKm(userLat, userLng, bathroom.latitude, bathroom.longitude);
-        //     const distMiles = (distKm * 0.621371);
-        //     const walkTimeMin = Math.round((distMiles / 3.1) * 60); // 5 km/h walking speed
-        //     popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distKm.toFixed(2)} mi)</span>`;
-        //     const walkTimeMin = Math.round((distMiles / 3.1) * 60);
-        //     popupContent += `<br><span>Estimated walk: 🚶‍♀️${walkTimeMin} min 📍${distMiles.toFixed(2)} mi</span>`;
-        // } else {
-        //     popupContent += `<br><span>Enable location to see walking time.</span>`;
-        // }
-        // marker.bindPopup(popupContent).openPopup();
-
-        // marker.setPopupContent(popupContent);
-        // marker.openPopup();
-        //             });
-        //         });
-        //     });
-
 
         function renderView(location) {
             let distanceStr = '';
@@ -292,22 +335,39 @@
                 });
         }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                userLat = position.coords.latitude;
-                userLng = position.coords.longitude;
-                L.marker([userLat, userLng], { icon: userIcon })
-                    .addTo(map)
-                    .bindPopup('You are here')
-                    .openPopup();
-                map.setView([userLat, userLng], 16);
-            }, function () {
-                alert('Geolocation failed. Please allow location access.');
-            });
-        }
-        else {
-            alert('Geolocation is not supported by this browser.');
-        }
+        // comment out after testing
+        // Hardcoded user location for testing (UCI campus example)
+        userLat = 33.646, userLng = -117.842;
+
+        // Optionally, add a marker for the user
+        L.marker([userLat, userLng], { icon: userIcon })
+            .addTo(map)
+            .bindPopup('You are here')
+            .openPopup();
+
+        map.setView([userLat, userLng], 16);
+
+        // comment out after testing
+
+
+        // uncomment this section to enable geolocation functionality
+
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(function (position) {
+        //         userLat = position.coords.latitude;
+        //         userLng = position.coords.longitude;
+        //         L.marker([userLat, userLng], { icon: userIcon })
+        //             .addTo(map)
+        //             .bindPopup('You are here')
+        //             .openPopup();
+        //         map.setView([userLat, userLng], 16);
+        //     }, function () {
+        //         alert('Geolocation failed. Please allow location access.');
+        //     });
+        // }
+        // else {
+        //     alert('Geolocation is not supported by this browser.');
+        // }
 
 
     </script>
