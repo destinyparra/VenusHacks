@@ -206,31 +206,11 @@
             const editDiv = document.getElementById(`edit-${id}`);
             viewDiv.style.display = 'none';
 
-
-            // editDiv.innerHTML = `
-            //         <form onsubmit="submitUpdate(event, ${id})">
-            //             <label for="pads-${id}">Pads:</label>
-            //             <select id="pads-${id}">
-            //                 <option value="Low" ${padsAvailability === 'Low' ? 'selected' : ''}>Low</option>
-            //                 <option value="Medium" ${padsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
-            //                 <option value="Stocked" ${padsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>
-            //             </select><br>
-
-            //             <label for="pads-${id}">Tampons:</label>
-            //             <select id="tampons-${id}">
-            //                 <option value="Low" ${tamponsAvailability === 'Low' ? 'selected' : ''}>Low</option>
-            //                 <option value="Medium" ${tamponsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
-            //                 <option value="Stocked" ${tamponsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>
-            //             </select><br>
-
-            //             <button onclick="submitUpdate(${id})">Save</button>
-            //             <button onclick="cancelEdit(${id})">Cancel</button>
-            //         </form>
-            //     `;
             editDiv.innerHTML = `
     <form onsubmit="submitUpdate(event, ${id})" class="edit-form">
         <label for="pads-${id}">Pads:</label>
         <select id="pads-${id}" class="small-select">
+            <option value="Empty" ${padsAvailability === 'Empty' ? 'selected' : ''}>Empty</option>
             <option value="Low" ${padsAvailability === 'Low' ? 'selected' : ''}>Low</option>
             <option value="Medium" ${padsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
             <option value="Stocked" ${padsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>
@@ -238,6 +218,7 @@
 
         <label for="tampons-${id}">Tampons:</label>
         <select id="tampons-${id}" class="small-select">
+            <option value="Empty" ${tamponsAvailability === 'Empty' ? 'selected' : ''}>Empty</option>
             <option value="Low" ${tamponsAvailability === 'Low' ? 'selected' : ''}>Low</option>
             <option value="Medium" ${tamponsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
             <option value="Stocked" ${tamponsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>

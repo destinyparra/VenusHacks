@@ -67,7 +67,7 @@ locations_raw = [
     {"name": "The Anteatery", "latitude": 33.6511269878, "longitude": -117.84575379603787},
 ]
 
-availability_options = ["Low", "Medium", "Stocked"]
+availability_options = ["Empty","Low", "Medium", "Stocked"]
 
 def extract_floor(name):
     parts = name.split(" - ")
