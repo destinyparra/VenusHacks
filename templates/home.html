@@ -7,6 +7,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
+
+  <!-- 
   <style>
     * {
       margin: 0;
@@ -334,10 +336,11 @@
         grid-template-columns: 1fr;
       }
     }
-  </style>
+  </style> -->
+
 </head>
 
-<body>
+<body class="home-page">
   <div class="floating-hearts" id="hearts"></div>
 
   <nav class="navbar">
@@ -354,7 +357,9 @@
   <!-- Main Content -->
   <div class="container">
     <div class="header">
-      <h1>💖 Zot Spot 💖</h1>
+      <h1> <span class="emoji">💖</span> Zot Spot <span class="emoji">💖</span>
+      </h1>
+
       <p class="subtitle"> Find Period Products at UCI ✨</p>
     </div>
 
