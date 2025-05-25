@@ -8,6 +8,56 @@
 
     <link rel="stylesheet" href="static/styles.css" />
     <style>
+
+        .bathroom-card {
+        background: #fff0f5;
+        border-radius: 20px;
+        padding: 20px;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 20px rgba(255, 105, 180, 0.2);
+        transition: transform 0.2s ease;
+        }
+
+        .bathroom-card:hover {
+            transform: translateY(-3px);
+        }
+
+        .bathroom-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .bathroom-header h3 {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: #c44569;
+            margin: 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .bathroom-header select {
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 2px solid #ffb6c1;
+            background: #fff;
+            font-weight: 600;
+            color: #c44569;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
+        }
+
+        .bathroom-details {
+            margin-top: 15px;
+            font-size: 0.95rem;
+            color: #6a1b9a;
+            line-height: 1.5;
+        }
+
+
+        
         #map {
             height: 500px;
             width: 100%;
@@ -546,45 +596,48 @@
                 renderGroups(groups);
             });
 
-        function renderGroups(groups) {
-            // const container = document.getElementById('locations-container');
-            const container = document.getElementById('building-list');
-            container.innerHTML = '';
+            function renderGroups(groups) {
+    const container = document.getElementById('building-list');
+    container.innerHTML = '';
 
-            for (const groupName in groups) {
-                const groupLocations = groups[groupName];
+    for (const groupName in groups) {
+        const groupLocations = groups[groupName];
 
-                const groupDiv = document.createElement('div');
-                groupDiv.classList.add('location-group');
+        const card = document.createElement('div');
+        card.className = 'bathroom-card';
 
-                const title = document.createElement('h3');
-                title.textContent = `Group: ${groupName}`;
-                groupDiv.appendChild(title);
+        const header = document.createElement('div');
+        header.className = 'bathroom-header';
 
-                const floorSelect = document.createElement('select');
-                floorSelect.innerHTML = '<option value="">Select Floor</option>';
+        const title = document.createElement('h3');
+        title.innerHTML = `${groupName}`;
+        header.appendChild(title);
 
-                groupLocations.forEach(loc => {
-                    const option = document.createElement('option');
-                    option.value = loc.id;
-                    option.textContent = loc.floor || loc.name;
-                    floorSelect.appendChild(option);
-                });
+        const select = document.createElement('select');
+        select.innerHTML = '<option value="">Select Floor</option>';
+        groupLocations.forEach(loc => {
+            const option = document.createElement('option');
+            option.value = loc.id;
+            option.textContent = loc.floor || loc.name;
+            select.appendChild(option);
+        });
+        header.appendChild(select);
+        card.appendChild(header);
 
-                groupDiv.appendChild(floorSelect);
-                const detailsDiv = document.createElement('div');
-                detailsDiv.id = `details-${groupName}`;
-                groupDiv.appendChild(detailsDiv);
+        const details = document.createElement('div');
+        details.className = 'bathroom-details';
+        card.appendChild(details);
 
-                floorSelect.addEventListener('change', () => {
-                    const selectedID = floorSelect.value;
-                    const location = groupLocations.find(l => l.id == selectedID);
-                    detailsDiv.innerHTML = renderView(location);
-                });
+        select.addEventListener('change', () => {
+            const selectedID = select.value;
+            const location = groupLocations.find(l => l.id == selectedID);
+            details.innerHTML = location ? renderView(location) : '';
+        });
 
-                container.appendChild(groupDiv);
-            }
-        }
+        container.appendChild(card);
+    }
+}
+
         function renderView(location) {
             return `
                 <div id="view-${location.id}">
