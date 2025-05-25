@@ -180,39 +180,6 @@
             }
         }
 
-        // function renderView(location) {
-        //     return `
-        //         <div id="view-${location.id}">
-        //             <strong>${location.name}</strong><br>
-        //             Pads: ${location.pads_availability}<br>
-        //             Tampons: ${location.tampons_availability}<br>
-        //             Free: ${location.free ? 'Yes' : 'No'}<br>
-        //             Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
-        //             Last Updated: ${location.last_updated}<br>
-        //             <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
-        //         </div>
-        //         <div id="edit-${location.id}" style="display:none;"></div>`;
-        // }
-
-        // if (userLat !== null && userLng !== null) {
-        //     const distKm = getDistanceFromLatLonInKm(userLat, userLng, bathroom.latitude, bathroom.longitude);
-        //     const distMiles = (distKm * 0.621371);
-        //     const walkTimeMin = Math.round((distMiles / 3.1) * 60); // 5 km/h walking speed
-        //     popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distKm.toFixed(2)} mi)</span>`;
-        //     const walkTimeMin = Math.round((distMiles / 3.1) * 60);
-        //     popupContent += `<br><span>Estimated walk: 🚶‍♀️${walkTimeMin} min 📍${distMiles.toFixed(2)} mi</span>`;
-        // } else {
-        //     popupContent += `<br><span>Enable location to see walking time.</span>`;
-        // }
-        // marker.bindPopup(popupContent).openPopup();
-
-        // marker.setPopupContent(popupContent);
-        // marker.openPopup();
-        //             });
-        //         });
-        //     });
-
-
         function renderView(location) {
             let distanceStr = '';
             if (userLat !== null && userLng !== null && location.latitude && location.longitude) {
@@ -292,23 +259,39 @@
                 });
         }
 
-        if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(function (position) {
-                userLat = position.coords.latitude;
-                userLng = position.coords.longitude;
-                L.marker([userLat, userLng], { icon: userIcon })
-                    .addTo(map)
-                    .bindPopup('You are here')
-                    .openPopup();
-                map.setView([userLat, userLng], 16);
-            }, function () {
-                alert('Geolocation failed. Please allow location access.');
-            });
-        }
-        else {
-            alert('Geolocation is not supported by this browser.');
-        }
+        // comment out after testing
+        // Hardcoded user location for testing (UCI campus example)
+        userLat = 33.646, userLng = -117.842;
 
+        // Optionally, add a marker for the user
+        L.marker([userLat, userLng], { icon: userIcon })
+            .addTo(map)
+            .bindPopup('You are here')
+            .openPopup();
+
+        map.setView([userLat, userLng], 16);
+
+        // comment out after testing
+
+
+        // uncomment this section to enable geolocation functionality
+
+        // if (navigator.geolocation) {
+        //     navigator.geolocation.getCurrentPosition(function (position) {
+        //         userLat = position.coords.latitude;
+        //         userLng = position.coords.longitude;
+        //         L.marker([userLat, userLng], { icon: userIcon })
+        //             .addTo(map)
+        //             .bindPopup('You are here')
+        //             .openPopup();
+        //         map.setView([userLat, userLng], 16);
+        //     }, function () {
+        //         alert('Geolocation failed. Please allow location access.');
+        //     });
+        // }
+        // else {
+        //     alert('Geolocation is not supported by this browser.');
+        // }
 
     </script>
 
