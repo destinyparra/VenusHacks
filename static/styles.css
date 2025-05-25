@@ -1,3 +1,36 @@
+/* ------------------------------- */
+/* ---------- ROOT VARIABLES ---------- */
+/* ------------------------------- */
+:root {
+    /* Colors */
+    --primary-pink: #ff6b9d;
+    --secondary-pink: #c44569;
+    --light-pink: #ff9a9e;
+    --pastel-pink: #fecfef;
+    --soft-pink: #ffecd2;
+    --lavender: #8e44ad;
+    --light-purple: #764ba2;
+    --map-gradient: linear-gradient(135deg, var(--light-pink) 0%, var(--pastel-pink) 50%, var(--soft-pink) 100%);
+
+    /* Typography */
+    --font-main: 'Arial', sans-serif;
+
+    /* Shadows */
+    --box-shadow-sm: 0 4px 12px rgba(255, 105, 180, 0.2);
+    --box-shadow-md: 0 8px 25px rgba(255, 105, 180, 0.15);
+    --box-shadow-lg: 0 12px 30px rgba(255, 105, 180, 0.3);
+
+    /* Radius */
+    --radius-sm: 10px;
+    --radius-md: 15px;
+    --radius-lg: 25px;
+
+    /* Spacing */
+    --section-padding: 2rem;
+    --tile-gap: 2rem;
+}
+
+
 /* General resets */
 * {
     margin: 0;
@@ -22,7 +55,7 @@ html {
 
 /* Navbar */
 .navbar {
-    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    background: linear-gradient(45deg, var(--primary-pink), var(--secondary-pink));
     padding: 1rem 2rem;
     display: flex;
     justify-content: space-between;
@@ -79,7 +112,7 @@ html {
 }
 
 h1 {
-    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    background: linear-gradient(45deg, var(--primary-pink), var(--secondary-pink));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -104,7 +137,7 @@ h1 .emoji {
 /* ---------- HOME PAGE ---------- */
 /* ------------------------------- */
 .home-page {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+    background: linear-gradient(135deg, var(--light-pink) 0%, var(--pastel-pink) 50%, var(--soft-pink) 100%);
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -142,7 +175,7 @@ h1 .emoji {
 
 
 .subtitle {
-    color: #8e44ad;
+    color: var(--lavender);
     font-size: 1.2rem;
     font-style: italic;
     margin-bottom: 1rem;
@@ -159,7 +192,7 @@ h1 .emoji {
 }
 
 .mission-statement h2 {
-    color: #c44569;
+    color: var(--secondary-pink);
     font-size: 1.5rem;
     margin-bottom: 1rem;
 }
@@ -257,7 +290,7 @@ h1 .emoji {
 
 /* Map Preview Tile */
 .map-tile {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    background: linear-gradient(135deg, #667eea 0%, var(--light-purple) 100%);
     color: white;
 }
 
@@ -299,7 +332,7 @@ h1 .emoji {
 }
 
 .about-section h2 {
-    color: #c44569;
+    color: var(--secondary-pink);
     font-size: 2rem;
     margin-bottom: 2rem;
     text-align: center;
@@ -320,7 +353,7 @@ h1 .emoji {
 }
 
 .about-card h3 {
-    color: #8e44ad;
+    color: var(--lavender);
     font-size: 1.3rem;
     margin-bottom: 1rem;
 }
@@ -357,7 +390,7 @@ h1 .emoji {
 .bathroom-header h3 {
     font-size: 1.3rem;
     font-weight: bold;
-    color: #c44569;
+    color: var(--secondary-pink);
     margin: 0;
     display: flex;
     align-items: center;
@@ -370,7 +403,7 @@ h1 .emoji {
     border: 2px solid #ffb6c1;
     background: #fff;
     font-weight: 600;
-    color: #c44569;
+    color: var(--secondary-pink);
     cursor: pointer;
     box-shadow: 0 2px 8px rgba(255, 182, 193, 0.2);
 }
@@ -385,28 +418,11 @@ h1 .emoji {
 
 
 .map-page {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+    background: linear-gradient(135deg, var(--light-pink) 0%, var(--pastel-pink) 50%, var(--pastel-pink) 100%);
     min-height: 100vh;
     overflow-x: hidden;
 }
 
-/* .map-page .container {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 2rem;
-} */
-
-/* 
-.map-page h1 {
-    background: linear-gradient(45deg, #ff6b9d, #c44569);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-size: 2.5rem;
-    font-weight: bold;
-    margin-bottom: 0.5rem;
-    text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
-} */
 
 
 .map-container {
@@ -469,7 +485,7 @@ h1 .emoji {
 }
 
 .control-btn.active {
-    background: linear-gradient(45deg, #e056fd, #c44569);
+    background: linear-gradient(45deg, #e056fd, var(--secondary-pink));
 }
 
 .design-card {
@@ -484,7 +500,7 @@ h1 .emoji {
 }
 
 .design-title {
-    color: #c44569;
+    color: var(--secondary-pink);
     margin-bottom: 1.5rem;
     font-size: 1.8rem;
     text-align: center;
@@ -503,7 +519,7 @@ h1 .emoji {
     padding: 20px;
     border-radius: 15px;
     box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
-    border-left: 5px solid #ff6b9d;
+    border-left: 5px solid var(--primary-pink);
     transition: all 0.3s ease;
     cursor: pointer;
 }
@@ -523,7 +539,7 @@ h1 .emoji {
 
 .building-name {
     font-weight: 700;
-    color: #8e44ad;
+    color: var(--lavender);
     font-size: 1.2rem;
 }
 
@@ -579,7 +595,7 @@ h1 .emoji {
 }
 
 .badge-available {
-    background: linear-gradient(45deg, #ff6b9d, #ff8fa3);
+    background: linear-gradient(45deg, var(--primary-pink), #ff8fa3);
     box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
 }
 
@@ -652,7 +668,7 @@ h1 .emoji {
 }
 
 .close-btn {
-    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    background: linear-gradient(45deg, var(--primary-pink), var(--secondary-pink));
     color: white;
     border: none;
     padding: 10px 20px;
@@ -670,7 +686,7 @@ h1 .emoji {
 
 .sparkle {
     position: absolute;
-    color: #ff6b9d;
+    color: var(--primary-pink);
     animation: sparkle 1.5s infinite ease-in-out;
     pointer-events: none;
 }
@@ -697,7 +713,7 @@ h1 .emoji {
 }
 
 .leaflet-popup-content {
-    color: #8e44ad;
+    color: var(--lavender);
     font-weight: 600;
 }
 
@@ -711,7 +727,7 @@ h1 .emoji {
     margin: 2rem 0 1rem 2rem;
     align-items: center;
     padding: 12px 28px;
-    background: linear-gradient(45deg, #ff6b9d, #ff8fa3);
+    background: linear-gradient(45deg, var(--primary-pink), #ff8fa3);
     color: #fff;
     text-decoration: none;
     border: none;
@@ -724,7 +740,7 @@ h1 .emoji {
 }
 
 .back-btn:hover {
-    background: linear-gradient(45deg, #ff8fa3, #ff6b9d);
+    background: linear-gradient(45deg, #ff8fa3, var(--primary-pink));
     transform: translateY(-2px) scale(1.04);
     box-shadow: 0 8px 25px rgba(255, 107, 157, 0.28);
     color: #fff;
@@ -732,7 +748,7 @@ h1 .emoji {
 
 
 .resources-page {
-    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+    background: linear-gradient(135deg, var(--light-pink) 0%, var(--pastel-pink) 50%, var(--soft-pink) 100%);
     min-height: 100vh;
     overflow-x: hidden;
 }
@@ -836,23 +852,37 @@ a.resource-link:hover {
         font-size: 2.2rem;
     }
 
-    .tile-grid {
-        grid-template-columns: 1fr;
-        gap: 1.5rem;
-    }
-
-    .tile {
-        padding: 2rem;
-    }
-
-    .about-section {
-        padding: 2rem;
-    }
-
+    .tile-grid,
     .about-content {
         grid-template-columns: 1fr;
     }
+
+    .tile,
+    .about-section,
+    .container {
+        padding: 2rem;
+    }
+
+    .map-container {
+        margin-left: 1rem;
+        margin-right: 1rem;
+    }
+
+    .controls {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .back-btn {
+        font-size: 1rem;
+        padding: 10px 20px;
+    }
+
+    #map {
+        height: 400px;
+    }
 }
+
 
 
 
