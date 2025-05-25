@@ -29,61 +29,6 @@
             text-align: center;
         }
 
-        /* .list-layout {
-            background: #f8f9ff;
-            border-radius: 15px;
-            padding: 20px;
-        }
-        
-        .building-item {
-            background: white;
-            margin-bottom: 15px;
-            padding: 15px;
-            border-radius: 10px;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
-            border-left: 5px solid #667eea;
-        }
-        
-        .building-header {
-            display: flex;
-            justify-content: between;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .building-name {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .distance {
-            color: #666;
-            font-size: 0.9rem;
-        }
-        
-        .bathroom-list {
-            margin-left: 20px;
-        }
-        
-        .bathroom-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 8px 0;
-            border-bottom: 1px solid #eee;
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            color: white;
-        }
-        
-        .badge-available { background: #4CAF50; }
-        .badge-low { background: #FF9800; }
-        .badge-empty { background: #F44336; } */
         * {
             margin: 0;
             padding: 0;
@@ -494,11 +439,6 @@
 </head>
 
 <body>
-    <!-- <div class="container">
-        <h1>Map View</h1>
-        <div id="map"></div>
-    </div> -->
-
     <div class="floating-hearts" id="hearts"></div>
 
     <div class="container">
@@ -517,129 +457,168 @@
             <div id="map"></div>
         </div>
 
-        <div class="design-card">
-            <h2 class="design-title">Bathrooms Near Me</h2>
-            <div class="list-layout" id="building-list">
-                <div class="building-item">
-                    <div class="building-header">
-                        <span class="building-name">Student Center</span>
-                        <span class="distance">0.2 mi</span>
-                    </div>
-                    <div class="bathroom-list">
-                        <div class="bathroom-item">
-                            <span>1st Floor - Women's</span>
-                            <span class="status-badge badge-available">Stocked</span>
-                        </div>
-                        <div class="bathroom-item">
-                            <span>2nd Floor - Women's</span>
-                            <span class="status-badge badge-low">Low</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="building-item">
-                    <div class="building-header">
-                        <span class="building-name">Langson Library</span>
-                        <span class="distance">0.4 mi</span>
-                    </div>
-                    <div class="bathroom-list">
-                        <div class="bathroom-item">
-                            <span>Ground Floor - All Gender</span>
-                            <span class="status-badge badge-available">Stocked</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- <div id="locations-container"></div> -->
 
         <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
         <script>
             var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
-
             var myIcon = L.icon({
                 iconUrl: 'static/images/tampon_icon.png',
                 iconSize: [40, 70],
                 iconAnchor: [22, 94],
                 popupAnchor: [-3, -76]
             });
-
             var userIcon = L.icon({
                 iconUrl: 'static/images/Woman_icon.png',
                 iconSize: [30, 50],
                 iconAnchor: [22, 94],
                 popupAnchor: [-3, -76]
             });
-
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
                 attribution: '© OpenStreetMap contributors'
             }).addTo(map);
 
-            //get from database (no more json)
+            //display locations (by floor) and update-form for each location
             fetch('/locations')
                 .then(response => response.json())
                 .then(data => {
+                    const groups = {};
+
                     data.forEach(location => {
-                        const popupContent = (loc) => `
-                    <div id="view-${loc.id}">
-                        <strong>${loc.name}</strong><br>
-                        Pads Availability: ${loc.pads_availability}<br>
-                        Tampons Availability: ${loc.tampons_availability}<br>
-                        Free: ${loc.free}<br>
-                        Accessible: ${loc.accessibility ? "Yes" : "No"}<br>
-                        Last Updated: ${loc.last_updated}<br>
-                        <button onclick="showEditForm(${loc.id})">Update Stock</button>
-                    </div>
-                    <div id="edit-${loc.id}" style="display:none;">
-                        <label for="pads-${loc.id}">Pads:</label>
-                        <select id="pads-${loc.id}">
-                            <option value="Low" ${loc.pads_availability === 'Low' ? 'selected' : ''}>Low</option>
-                            <option value="Medium" ${loc.pads_availability === 'Medium' ? 'selected' : ''}>Medium</option>
-                            <option value="Stocked" ${loc.pads_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
-                        </select><br>
-                        <label for="tampons-${loc.id}">Tampons:</label>
-                        <select id="tampons-${loc.id}">
-                            <option value="Low" ${loc.tampons_availability === 'Low' ? 'selected' : ''}>Low</option>
-                            <option value="Medium" ${loc.tampons_availability === 'Medium' ? 'selected' : ''}>Medium</option>
-                            <option value="Stocked" ${loc.tampons_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
-                        </select><br>
-                        <button onclick="submitUpdate(${loc.id})">Submit</button>
-                        <button onclick="cancelEdit(${loc.id})">Back</button>
-                    </div>
-                `;
-
-                        const marker = L.marker([location.latitude, location.longitude], { icon: myIcon })
-                            .addTo(map)
-                            .bindPopup(popupContent(location));
+                        if (!groups[location.location_group]) {
+                            groups[location.location_group] = [];
+                        }
+                        groups[location.location_group].push(location);
                     });
-                });
 
-            //show user location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var userLat = position.coords.latitude;
-                    var userLng = position.coords.longitude;
-                    L.marker([userLat, userLng], { icon: userIcon })
-                        .addTo(map)
-                        .bindPopup('You are here')
-                        .openPopup();
-                    map.setView([userLat, userLng], 16);
-                }, function () {
-                    alert('Geolocation failed. Please allow location access.');
+                    for (const groupName in groups) {
+                        const locations = groups[groupName];
+                        const {latitude, longitude} = locations[0];
+                        const groupMarker = L.marker([latitude, longitude], { icon: myIcon }).addTo(map);
+                        
+                        let floorOptions = `<option value="">Select Floor</option>`;
+                        locations.forEach(loc => {
+                            floorOptions += `<option value="${loc.id}">${loc.floor || loc.name}</option>`;
+                        });   
+                    
+                                    
+                        groupMarker.bindPopup(`
+                            <div>
+                            <strong>Group: ${groupName}</strong><br>
+                            <label for="floor-select-${groupName}">Choose Floor:</label><br>
+                            <select id="floor-select-${groupName}">
+                                ${floorOptions}
+                            </select>
+                            <div id="floor-details-${groupName}" style="margin-top: 10px;"></div>
+                            </div>
+                        `);
+
+                        groupMarker.on('popupopen', () => {
+                            const selectEl = document.getElementById(`floor-select-${groupName}`);
+                            const detailsDiv = document.getElementById(`floor-details-${groupName}`);
+
+                            selectEl.onchange = () => {
+                            const selectedID = selectEl.value;
+                            if (!selectedID) {
+                                detailsDiv.innerHTML = '';
+                                return;
+                            }
+                            const location = locations.find(l => l.id == selectedID);
+                            detailsDiv.innerHTML = renderView(location);
+                            };
+                        });
+                    }
+                    renderGroups(groups);
                 });
-            } else {
-                alert('Geolocation is not supported by this browser.');
+            
+            function renderGroups(groups) {
+                const container = document.getElementById('locations-container');
+                container.innerHTML = '';
+
+                for (const groupName in groups) {
+                    const groupLocations = groups[groupName];
+
+                    const groupDiv = document.createElement('div');
+                    groupDiv.classList.add('location-group');
+
+                    const title = document.createElement('h3');
+                    title.textContent = `Group: ${groupName}`;
+                    groupDiv.appendChild(title);
+
+                    const floorSelect = document.createElement('select');
+                    floorSelect.innerHTML = '<option value="">Select Floor</option>';
+
+                    groupLocations.forEach(loc => {
+                        const option = document.createElement('option');
+                        option.value = loc.id;
+                        option.textContent = loc.floor || loc.name;
+                        floorSelect.appendChild(option);
+                    });
+
+                    groupDiv.appendChild(floorSelect);
+                    const detailsDiv = document.createElement('div');
+                    detailsDiv.id = `details-${groupName}`;
+                    groupDiv.appendChild(detailsDiv);
+
+                    floorSelect.addEventListener('change', () => {
+                        const selectedID = floorSelect.value;
+                        const location = groupLocations.find(l => l.id == selectedID);
+                        detailsDiv.innerHTML = renderView(location);
+                    });
+
+                    container.appendChild(groupDiv);
+                }
+            }
+            function renderView(location) {
+                return `
+                <div id="view-${location.id}">
+                    <strong>${location.name}</strong><br>
+                    Pads: ${location.pads_availability}<br>
+                    Tampons: ${location.tampons_availability}<br>
+                    Free: ${location.free ? 'Yes' : 'No'}<br>
+                    Accessible: ${location.accessibility ? 'Yes' : 'No'}<br>
+                    Last Updated: ${location.last_updated}<br>
+                    <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
+                </div>
+                <div id="edit-${location.id}" style="display:none;"></div>`;
             }
 
-            function showEditForm(id) {
-                document.getElementById(`view-${id}`).style.display = 'none';
-                document.getElementById(`edit-${id}`).style.display = 'block';
+            function showEditForm(id, padsAvailability, tamponsAvailability) {
+                const viewDiv = document.getElementById(`view-${id}`);
+                const editDiv = document.getElementById(`edit-${id}`);
+                viewDiv.style.display = 'none';
+                //editDiv.style.display = 'block';
+
+                editDiv.innerHTML = `
+                    <form onsubmit="submitUpdate(event, ${id})">
+                        <label for="pads-${id}">Pads:</label>
+                        <select id="pads-${id}">
+                            <option value="Low" ${padsAvailability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${padsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${padsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+
+                        <label for="pads-${id}">Tampons:</label>
+                        <select id="tampons-${id}">
+                            <option value="Low" ${tamponsAvailability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${tamponsAvailability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${tamponsAvailability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+
+                        <button onclick="submitUpdate(${id})">Save</button>
+                        <button onclick="cancelEdit(${id})">Cancel</button>
+                    </form>
+                `;
+                editDiv.style.display = 'block';
             }
 
             function cancelEdit(id) {
-                document.getElementById(`edit-${id}`).style.display = 'none';
+                document.getElementById(`edit-${id}`).style.display = 'none'; 
                 document.getElementById(`view-${id}`).style.display = 'block';
             }
 
-            function submitUpdate(id) {
+            function submitUpdate(event, id) {
+                event.preventDefault();
                 const pads = document.getElementById(`pads-${id}`).value;
                 const tampons = document.getElementById(`tampons-${id}`).value;
 
@@ -655,11 +634,31 @@
                     .then(result => {
                         if (result.success) {
                             location.reload();
-                        } else {
+                        }
+                        else {
                             alert('Update failed.');
                         }
                     });
             }
+
+            //show user location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+                    L.marker([userLat, userLng], { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup('You are here')
+                        .openPopup();
+                    map.setView([userLat, userLng], 16);
+                }, function () {
+                    alert('Geolocation failed. Please allow location access.');
+                });
+            }
+            else {
+                alert('Geolocation is not supported by this browser.');
+            }
+
 
         </script>
 </body>
