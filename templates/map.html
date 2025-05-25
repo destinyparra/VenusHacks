@@ -7,6 +7,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Leaflet CSS -->
     <!-- <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" /> -->
+    <!-- Leaflet Routing Machine CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+
     <link rel="stylesheet" href="static/styles.css" />
 
 
@@ -51,24 +55,23 @@
     <!-- Leaflet JS -->
     <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
     <script>
+        let routingControl = null; // Keep this at the top, only one instance
+
+
         var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16); // UCI campus
         var myIcon = L.icon({
             iconUrl: 'static/images/tampon_icon.png',
             iconSize: [40, 70],
             iconAnchor: [22, 94],
             popupAnchor: [-3, -76],
-            // shadowUrl: 'my-icon-shadow.png',
-            // shadowSize: [68, 95],
-            // shadowAnchor: [22, 94]
+
         });
         var userIcon = L.icon({
             iconUrl: 'static/images/Woman_icon.png',
             iconSize: [30, 50],
             iconAnchor: [22, 94],
             popupAnchor: [-3, -76],
-            // shadowUrl: 'my-icon-shadow.png',
-            // shadowSize: [68, 95],
-            // shadowAnchor: [22, 94]
+
         });
 
         // L.marker([50.505, 30.57], { icon: myIcon }).addTo(map);
@@ -76,10 +79,7 @@
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
             attribution: '© OpenStreetMap contributors'
         }).addTo(map);
-        // L.marker([33.64252877591157, -117.84161569140684])
-        //     .addTo(map)
-        //     .bindPopup('UCI Campus')
-        //     .openPopup();
+
         let userLat = null;
         let userLng = null;
 
@@ -100,6 +100,8 @@
             alert('Geolocation is not supported by this browser.');
         }
 
+
+
         fetch('/static/bathrooms.json')
             .then(response => response.json())
             .then(data => {
@@ -107,41 +109,85 @@
                     const marker = L.marker([bathroom.latitude, bathroom.longitude], { icon: myIcon })
                         .addTo(map);
 
-                    // set inital popup content
-                    let popupContent = `<strong>${bathroom.name}</strong>`;
-                    marker.bindPopup(popupContent);
+                    marker.bindPopup(`
+                <strong>${bathroom.name}</strong><br>
+                <a href="/report?id=${bathroom.id}">Report Availability</a><br>
+                <button onclick="navigateTo(${bathroom.latitude}, ${bathroom.longitude})">
+                    Navigate Here
+                </button>
+            `);
 
-                    // Add click event to update popup content with distance
                     marker.on('click', function () {
                         let popupContent = `<strong>${bathroom.name}</strong>`;
                         if (userLat !== null && userLng !== null) {
                             const distKm = getDistanceFromLatLonInKm(userLat, userLng, bathroom.latitude, bathroom.longitude);
                             const distMiles = (distKm * 0.621371);
-                            const walkTimeMin = Math.round((distMiles / 3.1) * 60); // 5 km/h walking speed
-                            popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distKm.toFixed(2)} mi)</span>`;
+                            const walkTimeMin = Math.round((distMiles / 3.1) * 60);
+                            popupContent += `<br><span>Estimated walk: ${walkTimeMin} min (${distMiles.toFixed(2)} mi)</span>`;
+
+                            // Remove old route if it exists
+                            if (routingControl) {
+                                map.removeControl(routingControl);
+                            }
+                            // Draw new route
+                            routingControl = L.Routing.control({
+                                waypoints: [
+                                    L.latLng(userLat, userLng),
+                                    L.latLng(bathroom.latitude, bathroom.longitude)
+                                ],
+                                routeWhileDragging: false,
+                                draggableWaypoints: false,
+                                addWaypoints: false,
+                                show: false
+                            }).addTo(map);
+
                         } else {
                             popupContent += `<br><span>Enable location to see walking time.</span>`;
                         }
-                        marker.bindPopup(popupContent).openPopup();
+                        marker.setPopupContent(popupContent);
+                        marker.openPopup();
                     });
                 });
             });
+
+        // ...existing code...
+
+        // L.marker([bathroom.latitude, bathroom.longitude])
+        // .addTo(map)
+        // .on('click', () => {
+        // navigator.geolocation.getCurrentPosition(function (position) {
+        // const userLat = position.coords.latitude;
+        // const userLng = position.coords.longitude;
+
+        // L.Routing.control({
+        // waypoints: [
+        // L.latLng(userLat, userLng),
+        // L.latLng(bathroom.latitude, bathroom.longitude)
+        // ],
+        // routeWhileDragging: false
+        // }).addTo(map);
+        // });
+        // });
+
+
         // // get users current location
         // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(function (position) {
-        //         var userLat = position.coords.latitude;
-        //         var userLng = position.coords.longitude;
-        //         L.marker([userLat, userLng], { icon: userIcon })
-        //             .addTo(map)
-        //             .bindPopup('You are here')
-        //             .openPopup();
-        //         map.setView([userLat, userLng], 16);
-        //     }, function () {
-        //         alert('Geolocation failed. Please allow location access.');
-        //     });
+        // navigator.geolocation.getCurrentPosition(function (position) {
+        // var userLat = position.coords.latitude;
+        // var userLng = position.coords.longitude;
+        // L.marker([userLat, userLng], { icon: userIcon })
+        // .addTo(map)
+        // .bindPopup('You are here')
+        // .openPopup();
+        // map.setView([userLat, userLng], 16);
+        // }, function () {
+        // alert('Geolocation failed. Please allow location access.');
+        // });
         // } else {
-        //     alert('Geolocation is not supported by this browser.');
+        // alert('Geolocation is not supported by this browser.');
         // }
+
+
 
         // Calculate distance in kilometers between two lat/lng points
         function getDistanceFromLatLonInKm(lat1, lon1, lat2, lon2) {
@@ -157,6 +203,9 @@
             return d;
         }
     </script>
+    <!-- Leaflet Routing Machine JS -->
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.min.js"></script>
+
 </body>
 
 </html>
