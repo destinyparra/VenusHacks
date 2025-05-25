@@ -1,4 +1,333 @@
+/* home */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Arial', sans-serif;
+    background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.floating-hearts {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.heart {
+    position: absolute;
+    color: rgba(255, 177, 190, 0.978);
+    font-size: 20px;
+    animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+
+    0%,
+    100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0;
+    }
+
+    50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 1;
+    }
+}
+
+/* Navbar */
+.navbar {
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+}
+
+.nav-logo {
+    font-weight: bold;
+    font-size: 1.4rem;
+    color: white;
+}
+
+.nav-links a {
+    margin-left: 1.5rem;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: opacity 0.2s ease;
+}
+
+.nav-links a:hover {
+    opacity: 0.8;
+}
+
+.container {
+    max-width: 95%;
+    margin: 0 auto;
+    padding: 1.5rem;
+    position: relative;
+    z-index: 2;
+    text-align: center;
+}
+
+.header {
+    margin-top: 2rem;
+    margin-bottom: 3rem;
+    animation: slideDown 0.8s ease-out;
+}
+
+@keyframes slideDown {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+h1 {
+    background: linear-gradient(45deg, #ff6b9d, #c44569);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    font-size: 3rem;
+    font-weight: bold;
+    margin-bottom: 0.5rem;
+    text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+}
+
+.subtitle {
+    color: #8e44ad;
+    font-size: 1.2rem;
+    font-style: italic;
+    margin-bottom: 1rem;
+}
+
+.mission-statement {
+    background: rgb(251, 244, 255);
+    border-radius: 20px;
+    padding: 2rem;
+    margin: 2rem auto;
+    max-width: 800px;
+    box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+    backdrop-filter: blur(10px);
+}
+
+.mission-statement h2 {
+    color: #c44569;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.mission-statement p {
+    color: rgb(0, 0, 0);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+/* Enhanced Tile Section */
+.tile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    justify-content: center;
+    margin: 3rem auto;
+    max-width: 1000px;
+}
+
+.tile {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 25px;
+    padding: 2.5rem;
+    text-align: center;
+    text-decoration: none;
+    color: #e26d8e;
+    box-shadow: 0 12px 30px rgba(255, 105, 180, 0.2);
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.tile::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(45deg, transparent, rgba(255, 192, 203, 0.1), transparent);
+    transform: rotate(45deg);
+    transition: all 0.5s ease;
+    opacity: 0;
+}
+
+.tile:hover::before {
+    opacity: 1;
+    animation: shimmer 1.5s ease-in-out;
+}
+
+@keyframes shimmer {
+    0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+    }
+
+    100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+    }
+}
+
+.tile:hover {
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
+    border-color: rgba(255, 105, 180, 0.5);
+}
+
+.tile-icon-img {
+    width: 60px;
+    height: 60px;
+    margin-bottom: 1.2rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+}
+
+
+.tile-text {
+    font-size: 1.2rem;
+    font-weight: 700;
+    position: relative;
+    z-index: 2;
+    margin-bottom: 0.5rem;
+}
+
+.tile-description {
+    font-size: 0.9rem;
+    color: #888;
+    position: relative;
+    z-index: 2;
+    line-height: 1.4;
+}
+
+/* Map Preview Tile */
+.map-tile {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+.map-tile .tile-text,
+.map-tile .tile-description {
+    color: white;
+}
+
+.map-preview {
+    width: 100%;
+    height: 80px;
+    background: rgb(255, 234, 234);
+    border-radius: 10px;
+    margin: 1rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.map-preview::before {
+    content: '🗺️';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 2rem;
+    opacity: 0.7;
+}
+
+/* About Section */
+.about-section {
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 25px;
+    padding: 3rem;
+    margin: 4rem auto;
+    max-width: 900px;
+    box-shadow: 0 12px 30px rgba(255, 105, 180, 0.15);
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.about-section h2 {
+    color: #c44569;
+    font-size: 2rem;
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+.about-content {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 2rem;
+    text-align: left;
+}
+
+.about-card {
+    background: rgba(255, 255, 255, 0.7);
+    padding: 1.5rem;
+    border-radius: 15px;
+    box-shadow: 0 5px 15px rgba(255, 105, 180, 0.1);
+}
+
+.about-card h3 {
+    color: #8e44ad;
+    font-size: 1.3rem;
+    margin-bottom: 1rem;
+}
+
+.about-card p {
+    color: #666;
+    line-height: 1.6;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    h1 {
+        font-size: 2.2rem;
+    }
+
+    .tile-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+
+    .tile {
+        padding: 2rem;
+    }
+
+    .about-section {
+        padding: 2rem;
+    }
+
+    .about-content {
+        grid-template-columns: 1fr;
+    }
+}
+
 /* mapping */
+
 /* Navbar */
 .navbar {
     background: linear-gradient(45deg, #ff6b9d, #c44569);

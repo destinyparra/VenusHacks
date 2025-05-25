@@ -5,6 +5,7 @@
   <meta charset="UTF-8" />
   <title>💖 Zot Spot</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 
   <style>
     * {
@@ -391,7 +392,7 @@
       <!-- <a href="#contact" class="tile">
         <img src="{{ url_for('static', filename='images/contact us.jpg') }}" alt="Contact Us" class="tile-icon-img"> -->
       <a href="{{ url_for('contact') }}" class="tile">
-        <div class="tile-icon">💬</div>
+        <img src="{{ url_for('static', filename='/images/contact us.jpg') }}" alt="Contact Us" class="tile-icon-img">
         <div class="tile-text">Contact Us</div>
         <div class="tile-description">Get in touch with questions, suggestions, or to join our mission</div>
       </a>
