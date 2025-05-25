@@ -382,7 +382,7 @@
         <div class="tile-description">Help keep our community informed by reporting low or empty dispensers</div>
       </a> -->
 
-      <a href="#resources" class="tile">
+      <a href="{{ url_for('resources') }}" class="tile">
         <img src="{{ url_for('static', filename='images/resources.jpg') }}" alt="Resources" class="tile-icon-img">
         <div class="tile-text">Resources</div>
         <div class="tile-description">Access helpful information, health resources, and period education materials</div>
@@ -395,10 +395,7 @@
         <div class="tile-text">Contact Us</div>
         <div class="tile-description">Get in touch with questions, suggestions, or to join our mission</div>
       </a>
-      <a href="{{ url_for('resources') }}" class="tile">
-        <div class="tile-icon">📘</div>
-        <div class="tile-text">Resources</div>
-      </a>
+
     </section>
 
 
