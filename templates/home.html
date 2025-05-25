@@ -1,45 +1,208 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #FFFFFF;
-        }
+  <meta charset="UTF-8" />
+  <title>💖 Zot Spot</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        h1 {
-            color: #2c3e50;
-            text-align: center;
-        }
+    body {
+      font-family: 'Arial', sans-serif;
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
 
-        p {
-            color: #800080;
-            text-align: center;
-            font-size: 1.1rem;
-        }
-    </style>
+    .floating-hearts {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    .heart {
+      position: absolute;
+      color: rgba(255, 192, 203, 0.3);
+      font-size: 20px;
+      animation: float 6s ease-in-out infinite;
+    }
+
+    @keyframes float {
+
+      0%,
+      100% {
+        transform: translateY(0px) rotate(0deg);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translateY(-20px) rotate(180deg);
+        opacity: 1;
+      }
+    }
+
+    /* Navbar */
+    .navbar {
+      background: linear-gradient(45deg, #ff6b9d, #c44569);
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      box-shadow: 0 4px 12px rgba(255, 105, 180, 0.2);
+    }
+
+    .nav-logo {
+      font-weight: bold;
+      font-size: 1.4rem;
+      color: white;
+    }
+
+    .nav-links a {
+      margin-left: 1.5rem;
+      text-decoration: none;
+      color: white;
+      font-weight: 600;
+      transition: opacity 0.2s ease;
+    }
+
+    .nav-links a:hover {
+      opacity: 0.8;
+    }
+
+    .container {
+      max-width: 95%;
+      margin: 0 auto;
+      padding: 1.5rem;
+      position: relative;
+      z-index: 2;
+      text-align: center;
+    }
+
+    .header {
+      margin-top: 2rem;
+      margin-bottom: 2rem;
+      animation: slideDown 0.8s ease-out;
+    }
+
+    @keyframes slideDown {
+      from {
+        transform: translateY(-50px);
+        opacity: 0;
+      }
+
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    h1 {
+      background: linear-gradient(45deg, #ff6b9d, #c44569);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      font-size: 2.5rem;
+      font-weight: bold;
+      margin-bottom: 0.5rem;
+      text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+    }
+
+    .subtitle {
+      color: #8e44ad;
+      font-size: 1.1rem;
+      font-style: italic;
+    }
+
+    /* Tile Section */
+    .tile-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem;
+      justify-content: center;
+      margin: 2rem auto 3rem auto;
+      max-width: 900px;
+    }
+
+    .tile {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      width: 240px;
+      text-align: center;
+      text-decoration: none;
+      color: #c44569;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      transition: all 0.3s ease;
+    }
+
+    .tile:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(255, 105, 180, 0.3);
+    }
+
+    .tile-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .tile-text {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+  </style>
 </head>
 
 <body>
-    <!-- <div class="container">
-        <h1>Auntie Flows Crimson Compass</h1>
-        <p>LOCATE PERIOD ITEMS NOW</p>
-    </div> -->
-    <div class="container">
-        <h1>Auntie Flows Crimson Compass</h1>
-        <p>LOCATE PERIOD ITEMS NOW</p>
-        <a href="{{ url_for('map_view') }}"
-            style="display:inline-block;padding:10px 20px;background:#800080;color:#fff;text-decoration:none;border-radius:5px;margin-top:20px;">Go
-            to Map</a>
+  <!-- Floating Hearts -->
+  <div class="floating-hearts" id="hearts"></div>
+
+  <!-- Navbar -->
+  <nav class="navbar">
+    <div class="nav-logo">💖 Zot Spot</div>
+    <div class="nav-links">
+      <a href="#">Home</a>
+      <a href="{{ url_for('map_view') }}">Map</a>
+      <a href="{{ url_for('map_view') }}#report">Report</a> <!-- ✅ fixed -->
+      <a href="#about">About</a>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="container">
+    <div class="header">
+      <h1>💖 Zot Spot 💖</h1>
+      <p class="subtitle">Find Period Products at UCI ✨</p>
     </div>
 
+    <!-- Tiles -->
+    <section class="tile-grid">
+      <a href="{{ url_for('map_view') }}" class="tile">
+        <div class="tile-icon">📍</div>
+        <div class="tile-text">Find a Product</div>
+      </a>
+      <a href="{{ url_for('map_view') }}#report" class="tile">
+        <div class="tile-icon">📢</div>
+        <div class="tile-text">Report Low Stock</div>
+      </a>
+      <a href="#contact" class="tile">
+        <div class="tile-icon">💬</div>
+        <div class="tile-text">Contact Us</div>
+      </a>
+    </section>
+  </div>
 </body>
 
 </html>

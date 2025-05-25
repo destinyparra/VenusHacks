@@ -5,8 +5,8 @@
     <title>Map View</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!-- Leaflet CSS -->
-    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+
+    <link rel="stylesheet" href="static/styles.css" />
     <style>
         #map {
             height: 500px;
@@ -28,6 +28,468 @@
             color: #2c3e50;
             text-align: center;
         }
+
+        /* .list-layout {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+        }
+        
+        .building-item {
+            background: white;
+            margin-bottom: 15px;
+            padding: 15px;
+            border-radius: 10px;
+            box-shadow: 0 5px 10px rgba(0,0,0,0.05);
+            border-left: 5px solid #667eea;
+        }
+        
+        .building-header {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .building-name {
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .distance {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        
+        .bathroom-list {
+            margin-left: 20px;
+        }
+        
+        .bathroom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: white;
+        }
+        
+        .badge-available { background: #4CAF50; }
+        .badge-low { background: #FF9800; }
+        .badge-empty { background: #F44336; } */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #fecfef 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .floating-hearts {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .heart {
+            position: absolute;
+            color: rgba(255, 192, 203, 0.3);
+            font-size: 20px;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translateY(0px) rotate(0deg);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(180deg);
+                opacity: 1;
+            }
+        }
+
+        .container {
+            max-width: 95%;
+            margin: 0 auto;
+            padding: 1rem;
+            position: relative;
+            z-index: 2;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+            animation: slideDown 0.8s ease-out;
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-50px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        h1 {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
+        }
+
+        .subtitle {
+            color: #8e44ad;
+            font-size: 1.1rem;
+            font-style: italic;
+        }
+
+        .back-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 12px 24px;
+            background: linear-gradient(45deg, #ff6b9d, #ff8fa3);
+            color: white;
+            text-decoration: none;
+            border-radius: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 15px rgba(255, 107, 157, 0.4);
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(255, 107, 157, 0.6);
+            background: linear-gradient(45deg, #ff8fa3, #ff6b9d);
+        }
+
+        .map-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 30px rgba(255, 105, 180, 0.3);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 192, 203, 0.5);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                transform: translateY(30px);
+                opacity: 0;
+            }
+
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        #map {
+            height: 500px;
+            width: 100%;
+            border-radius: 15px;
+            box-shadow: inset 0 4px 8px rgba(255, 105, 180, 0.2);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .control-btn {
+            padding: 10px 20px;
+            background: linear-gradient(45deg, #ff9ff3, #f368e0);
+            color: white;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 12px rgba(243, 104, 224, 0.3);
+        }
+
+        .control-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 18px rgba(243, 104, 224, 0.5);
+        }
+
+        .control-btn.active {
+            background: linear-gradient(45deg, #e056fd, #c44569);
+        }
+
+        .design-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 35px rgba(255, 105, 180, 0.2);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 192, 203, 0.3);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease-out 0.6s both;
+        }
+
+        .design-title {
+            color: #c44569;
+            margin-bottom: 1.5rem;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+
+        .list-layout {
+            background: linear-gradient(135deg, #fff5f8, #ffeef5);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255, 192, 203, 0.3);
+        }
+
+        .building-item {
+            background: white;
+            margin-bottom: 15px;
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+            border-left: 5px solid #ff6b9d;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .building-item:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(255, 105, 180, 0.25);
+            border-left-width: 8px;
+        }
+
+        .building-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .building-name {
+            font-weight: 700;
+            color: #8e44ad;
+            font-size: 1.2rem;
+        }
+
+        .distance {
+            background: linear-gradient(45deg, #ff9ff3, #f368e0);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .bathroom-list {
+            margin-left: 20px;
+        }
+
+        .bathroom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(255, 192, 203, 0.3);
+            transition: all 0.2s ease;
+        }
+
+        .bathroom-item:hover {
+            padding-left: 10px;
+            background: rgba(255, 240, 245, 0.5);
+            border-radius: 8px;
+        }
+
+        .status-badge {
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .badge-available {
+            background: linear-gradient(45deg, #ff6b9d, #ff8fa3);
+            box-shadow: 0 4px 12px rgba(255, 107, 157, 0.4);
+        }
+
+        .badge-low {
+            background: linear-gradient(45deg, #ffa726, #ffcc02);
+            box-shadow: 0 4px 12px rgba(255, 167, 38, 0.4);
+        }
+
+        .badge-empty {
+            background: linear-gradient(45deg, #e91e63, #ad1457);
+            box-shadow: 0 4px 12px rgba(233, 30, 99, 0.4);
+        }
+
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 105, 180, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 1000;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
+        }
+
+        .popup-content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(255, 105, 180, 0.4);
+            border: 3px solid rgba(255, 192, 203, 0.5);
+            max-width: 400px;
+            width: 90%;
+            animation: popIn 0.4s ease-out;
+        }
+
+        @keyframes popIn {
+            from {
+                transform: translate(-50%, -50%) scale(0.8);
+                opacity: 0;
+            }
+
+            to {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .close-btn {
+            background: linear-gradient(45deg, #ff6b9d, #c44569);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+
+        .close-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 18px rgba(255, 107, 157, 0.4);
+        }
+
+        .sparkle {
+            position: absolute;
+            color: #ff6b9d;
+            animation: sparkle 1.5s infinite ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes sparkle {
+
+            0%,
+            100% {
+                opacity: 0;
+                transform: scale(0);
+            }
+
+            50% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        /* Custom map popup styles */
+        .leaflet-popup-content-wrapper {
+            background: linear-gradient(135deg, #fff, #fdf2f8);
+            border-radius: 15px;
+            border: 2px solid rgba(255, 192, 203, 0.5);
+        }
+
+        .leaflet-popup-content {
+            color: #8e44ad;
+            font-weight: 600;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0.5rem;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            #map {
+                height: 400px;
+            }
+
+            .controls {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
     </style>
 </head>
 
@@ -37,38 +499,169 @@
         <div id="map"></div>
     </div> -->
 
+    <div class="floating-hearts" id="hearts"></div>
+
     <div class="container">
-        <h1>Map View</h1>
-        <a href="{{ url_for('home') }}"
-            style="display:inline-block;padding:10px 20px;background:#2c3e50;color:#fff;text-decoration:none;border-radius:5px;margin-bottom:20px;">Back
-            to Home</a>
-        <div id="map"></div>
-    </div>
+        <div class="header">
+            <h1>💖 Zot Spot 💖</h1>
+        </div>
 
-    <!-- Leaflet JS -->
-    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-    <script>
-        // var map = L.map('map').setView([34.0522, -118.2437], 13); // Example: Los Angeles
-        var map = L.map('map').setView([33.64252877591157, -117.84161569140684], 16); // UCI campus
+        <a href="{{ url_for('home') }}" class="back-btn">
+            Back to Home
+        </a>
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            attribution: '© OpenStreetMap contributors'
-        }).addTo(map);
-        // L.marker([33.64252877591157, -117.84161569140684])
-        //     .addTo(map)
-        //     .bindPopup('UCI Campus')
-        //     .openPopup();
-        fetch('/static/bathrooms.json')
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(bathroom => {
-                    L.marker([bathroom.latitude, bathroom.longitude])
-                        .addTo(map)
-                        .bindPopup(`<strong>${bathroom.name}</strong>`);
-                });
+        <div class="map-container">
+            <div class="controls">
+
+            </div>
+            <div id="map"></div>
+        </div>
+
+        <div class="design-card">
+            <h2 class="design-title">Bathrooms Near Me</h2>
+            <div class="list-layout" id="building-list">
+                <div class="building-item">
+                    <div class="building-header">
+                        <span class="building-name">Student Center</span>
+                        <span class="distance">0.2 mi</span>
+                    </div>
+                    <div class="bathroom-list">
+                        <div class="bathroom-item">
+                            <span>1st Floor - Women's</span>
+                            <span class="status-badge badge-available">Stocked</span>
+                        </div>
+                        <div class="bathroom-item">
+                            <span>2nd Floor - Women's</span>
+                            <span class="status-badge badge-low">Low</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="building-item">
+                    <div class="building-header">
+                        <span class="building-name">Langson Library</span>
+                        <span class="distance">0.4 mi</span>
+                    </div>
+                    <div class="bathroom-list">
+                        <div class="bathroom-item">
+                            <span>Ground Floor - All Gender</span>
+                            <span class="status-badge badge-available">Stocked</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+        <script>
+            var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
+
+            var myIcon = L.icon({
+                iconUrl: 'static/images/tampon_icon.png',
+                iconSize: [40, 70],
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76]
             });
 
-    </script>
+            var userIcon = L.icon({
+                iconUrl: 'static/images/Woman_icon.png',
+                iconSize: [30, 50],
+                iconAnchor: [22, 94],
+                popupAnchor: [-3, -76]
+            });
+
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            //get from database (no more json)
+            fetch('/locations')
+                .then(response => response.json())
+                .then(data => {
+                    data.forEach(location => {
+                        const popupContent = (loc) => `
+                    <div id="view-${loc.id}">
+                        <strong>${loc.name}</strong><br>
+                        Pads Availability: ${loc.pads_availability}<br>
+                        Tampons Availability: ${loc.tampons_availability}<br>
+                        Free: ${loc.free}<br>
+                        Accessible: ${loc.accessibility ? "Yes" : "No"}<br>
+                        Last Updated: ${loc.last_updated}<br>
+                        <button onclick="showEditForm(${loc.id})">Update Stock</button>
+                    </div>
+                    <div id="edit-${loc.id}" style="display:none;">
+                        <label for="pads-${loc.id}">Pads:</label>
+                        <select id="pads-${loc.id}">
+                            <option value="Low" ${loc.pads_availability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${loc.pads_availability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${loc.pads_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+                        <label for="tampons-${loc.id}">Tampons:</label>
+                        <select id="tampons-${loc.id}">
+                            <option value="Low" ${loc.tampons_availability === 'Low' ? 'selected' : ''}>Low</option>
+                            <option value="Medium" ${loc.tampons_availability === 'Medium' ? 'selected' : ''}>Medium</option>
+                            <option value="Stocked" ${loc.tampons_availability === 'Stocked' ? 'selected' : ''}>Stocked</option>
+                        </select><br>
+                        <button onclick="submitUpdate(${loc.id})">Submit</button>
+                        <button onclick="cancelEdit(${loc.id})">Back</button>
+                    </div>
+                `;
+
+                        const marker = L.marker([location.latitude, location.longitude], { icon: myIcon })
+                            .addTo(map)
+                            .bindPopup(popupContent(location));
+                    });
+                });
+
+            //show user location
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(function (position) {
+                    var userLat = position.coords.latitude;
+                    var userLng = position.coords.longitude;
+                    L.marker([userLat, userLng], { icon: userIcon })
+                        .addTo(map)
+                        .bindPopup('You are here')
+                        .openPopup();
+                    map.setView([userLat, userLng], 16);
+                }, function () {
+                    alert('Geolocation failed. Please allow location access.');
+                });
+            } else {
+                alert('Geolocation is not supported by this browser.');
+            }
+
+            function showEditForm(id) {
+                document.getElementById(`view-${id}`).style.display = 'none';
+                document.getElementById(`edit-${id}`).style.display = 'block';
+            }
+
+            function cancelEdit(id) {
+                document.getElementById(`edit-${id}`).style.display = 'none';
+                document.getElementById(`view-${id}`).style.display = 'block';
+            }
+
+            function submitUpdate(id) {
+                const pads = document.getElementById(`pads-${id}`).value;
+                const tampons = document.getElementById(`tampons-${id}`).value;
+
+                fetch(`/update_stock/${id}`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        pads_availability: pads,
+                        tampons_availability: tampons
+                    })
+                })
+                    .then(response => response.json())
+                    .then(result => {
+                        if (result.success) {
+                            location.reload();
+                        } else {
+                            alert('Update failed.');
+                        }
+                    });
+            }
+
+        </script>
 </body>
 
 </html>
