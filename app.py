@@ -11,6 +11,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///period_products.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.secret_key = 'your_secret_key_here'
+
+
 db = SQLAlchemy(app)
 
 class Location(db.Model):
@@ -78,6 +81,12 @@ def locations():
         'last_updated': loc.last_updated.strftime('%Y-%m-%d %H:%M:%S') if loc.last_updated else ''
     } for loc in all_locations]
     return jsonify(locations_data)
+
+
+@app.route('/contact')
+def contact():
+   return render_template('contact.html')
+
 
 
 

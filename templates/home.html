@@ -38,10 +38,13 @@
     }
 
     @keyframes float {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: translateY(0px) rotate(0deg);
         opacity: 0;
       }
+
       50% {
         transform: translateY(-20px) rotate(180deg);
         opacity: 1;
@@ -99,6 +102,7 @@
         transform: translateY(-50px);
         opacity: 0;
       }
+
       to {
         transform: translateY(0);
         opacity: 1;
@@ -189,8 +193,13 @@
     }
 
     @keyframes shimmer {
-      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
-      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
     }
 
     .tile:hover {
@@ -200,12 +209,12 @@
     }
 
     .tile-icon-img {
-        width: 60px;
-        height: 60px;
-        margin-bottom: 1.2rem;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        object-fit: cover;
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
     }
 
 
@@ -306,20 +315,20 @@
       h1 {
         font-size: 2.2rem;
       }
-      
+
       .tile-grid {
         grid-template-columns: 1fr;
         gap: 1.5rem;
       }
-      
+
       .tile {
         padding: 2rem;
       }
-      
+
       .about-section {
         padding: 2rem;
       }
-      
+
       .about-content {
         grid-template-columns: 1fr;
       }
@@ -328,17 +337,16 @@
 </head>
 
 <body>
-  <!-- Floating Hearts -->
   <div class="floating-hearts" id="hearts"></div>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-logo">💖 Zot Spot</div>
     <div class="nav-links">
       <a href="#">Home</a>
       <a href="{{ url_for('map_view') }}">Map</a>
-      <a href="{{ url_for('map_view') }}#report">Report</a> 
+      <a href="{{ url_for('map_view') }}#report">Report</a>
       <a href="#about">About</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
     </div>
   </nav>
 
@@ -352,13 +360,17 @@
     <!-- Mission Statement -->
     <section class="mission-statement">
       <h2>🌟 Our Mission</h2>
-      <p>Finding period products on campus shouldn't be a struggle or inaccessible. Too often, it's unclear which bathrooms have them available or where to even start looking. Zot Spot aims to increase accessibility and ease by helping you quickly locate free period products across campus – because no one should have to stress during their period. </p>
+      <p>Finding period products on campus shouldn't be a struggle or inaccessible. Too often, it's unclear which
+        bathrooms have them available or where to even start looking. Zot Spot aims to increase accessibility and ease
+        by helping you quickly locate free period products across campus – because no one should have to stress during
+        their period. </p>
     </section>
 
     <!-- Enhanced Tiles -->
     <section class="tile-grid">
       <a href="{{ url_for('map_view') }}" class="tile map-tile">
-        <img src="{{ url_for('static', filename='images/find_a_product.jpg') }}" alt="Find Products" class="tile-icon-img">
+        <img src="{{ url_for('static', filename='images/find_a_product.jpg') }}" alt="Find Products"
+          class="tile-icon-img">
         <div class="tile-text">Find Products</div>
         <div class="map-preview"></div>
         <div class="tile-description">Locate free period products near you on our interactive campus map</div>
@@ -376,13 +388,15 @@
         <div class="tile-description">Access helpful information, health resources, and period education materials</div>
       </a>
 
-      <a href="#contact" class="tile">
-        <img src="{{ url_for('static', filename='images/contact us.jpg') }}" alt="Contact Us" class="tile-icon-img">
+      <!-- <a href="#contact" class="tile">
+        <img src="{{ url_for('static', filename='images/contact us.jpg') }}" alt="Contact Us" class="tile-icon-img"> -->
+      <a href="{{ url_for('contact') }}" class="tile">
+        <div class="tile-icon">💬</div>
         <div class="tile-text">Contact Us</div>
         <div class="tile-description">Get in touch with questions, suggestions, or to join our mission</div>
       </a>
     </section>
-    
+
 
 
 
@@ -392,22 +406,30 @@
       <div class="about-content">
         <div class="about-card">
           <h3>🎯 What We Do</h3>
-          <p>Zot Spot helps students at UC Irvine easily locate free period products across campus. By providing a simple, student-friendly web app, we take the guesswork out of finding accessible menstrual resources—so you can focus on what matters, not on searching bathroom to bathroom. </p>
+          <p>Zot Spot helps students at UC Irvine easily locate free period products across campus. By providing a
+            simple, student-friendly web app, we take the guesswork out of finding accessible menstrual resources—so you
+            can focus on what matters, not on searching bathroom to bathroom. </p>
         </div>
-        
+
         <div class="about-card">
           <h3>🤝 Community Driven</h3>
-          <p>Zot Spot is built by students, for students. We believe in mutual care and collective empowerment, and we collaborate with campus organizations and student advocates to improve access, dignity, and support around menstrual health. </p>
+          <p>Zot Spot is built by students, for students. We believe in mutual care and collective empowerment, and we
+            collaborate with campus organizations and student advocates to improve access, dignity, and support around
+            menstrual health. </p>
         </div>
-        
+
         <div class="about-card">
           <h3>🌱 Growing Impact</h3>
-          <p>What started as a small passion project is turning into a movement. With more locations added regularly and feedback features to guide improvements, Zot Spot is committed to scaling its reach and helping UCI become a more inclusive and compassionate place for everyone.</p>
+          <p>What started as a small passion project is turning into a movement. With more locations added regularly and
+            feedback features to guide improvements, Zot Spot is committed to scaling its reach and helping UCI become a
+            more inclusive and compassionate place for everyone.</p>
         </div>
-        
+
         <div class="about-card">
           <h3>💡 Vision Forward</h3>
-          <p> We envision a campus where no one is left scrambling for period products. Our goal is to expand to more universities, integrate real-time availability, and advocate for sustainable, stigma-free solutions—because period equity isn’t a luxury; it’s a right. </p>
+          <p> We envision a campus where no one is left scrambling for period products. Our goal is to expand to more
+            universities, integrate real-time availability, and advocate for sustainable, stigma-free solutions—because
+            period equity isn’t a luxury; it’s a right. </p>
         </div>
       </div>
     </section>
