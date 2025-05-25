@@ -66,6 +66,12 @@ def add_location():
 def map_view():
     return render_template('map.html')
 
+
+@app.route('/resources')
+def resources():
+    return render_template('resources.html')
+
+
 @app.route('/locations')
 def locations():
     all_locations = Location.query.all()
