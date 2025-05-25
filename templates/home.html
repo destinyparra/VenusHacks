@@ -15,7 +15,7 @@
 
     body {
       font-family: 'Arial', sans-serif;
-      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+      background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 50%, #ffecd2 100%);
       min-height: 100vh;
       overflow-x: hidden;
     }
@@ -32,7 +32,7 @@
 
     .heart {
       position: absolute;
-      color: rgba(255, 192, 203, 0.3);
+      color: rgba(255, 177, 190, 0.978);
       font-size: 20px;
       animation: float 6s ease-in-out infinite;
     }
@@ -93,7 +93,7 @@
 
     .header {
       margin-top: 2rem;
-      margin-bottom: 2rem;
+      margin-bottom: 3rem;
       animation: slideDown 0.8s ease-out;
     }
 
@@ -114,7 +114,7 @@
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
-      font-size: 2.5rem;
+      font-size: 3rem;
       font-weight: bold;
       margin-bottom: 0.5rem;
       text-shadow: 2px 2px 4px rgba(255, 105, 180, 0.3);
@@ -122,61 +122,231 @@
 
     .subtitle {
       color: #8e44ad;
-      font-size: 1.1rem;
+      font-size: 1.2rem;
       font-style: italic;
-    }
-
-    /* Tile Section */
-    .tile-grid {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.5rem;
-      justify-content: center;
-      margin: 2rem auto 3rem auto;
-      max-width: 900px;
-    }
-
-    .tile {
-      background: white;
-      border-radius: 20px;
-      padding: 2rem;
-      width: 240px;
-      text-align: center;
-      text-decoration: none;
-      color: #c44569;
-      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
-      transition: all 0.3s ease;
-    }
-
-    .tile:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 12px 35px rgba(255, 105, 180, 0.3);
-    }
-
-    .tile-icon {
-      font-size: 2.5rem;
       margin-bottom: 1rem;
     }
 
-    .tile-text {
+    .mission-statement {
+      background: rgb(251, 244, 255);
+      border-radius: 20px;
+      padding: 2rem;
+      margin: 2rem auto;
+      max-width: 800px;
+      box-shadow: 0 8px 25px rgba(255, 105, 180, 0.15);
+      backdrop-filter: blur(10px);
+    }
+
+    .mission-statement h2 {
+      color: #c44569;
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .mission-statement p {
+      color: rgb(0, 0, 0);
       font-size: 1.1rem;
-      font-weight: 600;
+      line-height: 1.6;
+    }
+
+    /* Enhanced Tile Section */
+    .tile-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      justify-content: center;
+      margin: 3rem auto;
+      max-width: 1000px;
+    }
+
+    .tile {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 25px;
+      padding: 2.5rem;
+      text-align: center;
+      text-decoration: none;
+      color: #e26d8e;
+      box-shadow: 0 12px 30px rgba(255, 105, 180, 0.2);
+      transition: all 0.4s ease;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .tile::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255, 192, 203, 0.1), transparent);
+      transform: rotate(45deg);
+      transition: all 0.5s ease;
+      opacity: 0;
+    }
+
+    .tile:hover::before {
+      opacity: 1;
+      animation: shimmer 1.5s ease-in-out;
+    }
+
+    @keyframes shimmer {
+      0% {
+        transform: translateX(-100%) translateY(-100%) rotate(45deg);
+      }
+
+      100% {
+        transform: translateX(100%) translateY(100%) rotate(45deg);
+      }
+    }
+
+    .tile:hover {
+      transform: translateY(-8px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(255, 105, 180, 0.3);
+      border-color: rgba(255, 105, 180, 0.5);
+    }
+
+    .tile-icon-img {
+      width: 60px;
+      height: 60px;
+      margin-bottom: 1.2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      object-fit: cover;
+    }
+
+
+    .tile-text {
+      font-size: 1.2rem;
+      font-weight: 700;
+      position: relative;
+      z-index: 2;
+      margin-bottom: 0.5rem;
+    }
+
+    .tile-description {
+      font-size: 0.9rem;
+      color: #888;
+      position: relative;
+      z-index: 2;
+      line-height: 1.4;
+    }
+
+    /* Map Preview Tile */
+    .map-tile {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .map-tile .tile-text,
+    .map-tile .tile-description {
+      color: white;
+    }
+
+    .map-preview {
+      width: 100%;
+      height: 80px;
+      background: rgb(255, 234, 234);
+      border-radius: 10px;
+      margin: 1rem 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .map-preview::before {
+      content: '🗺️';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      opacity: 0.7;
+    }
+
+    /* About Section */
+    .about-section {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 25px;
+      padding: 3rem;
+      margin: 4rem auto;
+      max-width: 900px;
+      box-shadow: 0 12px 30px rgba(255, 105, 180, 0.15);
+      backdrop-filter: blur(10px);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .about-section h2 {
+      color: #c44569;
+      font-size: 2rem;
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .about-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      text-align: left;
+    }
+
+    .about-card {
+      background: rgba(255, 255, 255, 0.7);
+      padding: 1.5rem;
+      border-radius: 15px;
+      box-shadow: 0 5px 15px rgba(255, 105, 180, 0.1);
+    }
+
+    .about-card h3 {
+      color: #8e44ad;
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+    }
+
+    .about-card p {
+      color: #666;
+      line-height: 1.6;
+      font-size: 1rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 2.2rem;
+      }
+
+      .tile-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .tile {
+        padding: 2rem;
+      }
+
+      .about-section {
+        padding: 2rem;
+      }
+
+      .about-content {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
 
 <body>
-  <!-- Floating Hearts -->
   <div class="floating-hearts" id="hearts"></div>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-logo">💖 Zot Spot</div>
     <div class="nav-links">
       <a href="#">Home</a>
       <a href="{{ url_for('map_view') }}">Map</a>
-      <a href="{{ url_for('map_view') }}#report">Report</a> <!-- ✅ fixed -->
+      <a href="{{ url_for('map_view') }}#report">Report</a>
       <a href="#about">About</a>
+      <a href="{{ url_for('resources') }}">Resources</a>
     </div>
   </nav>
 
@@ -184,25 +354,95 @@
   <div class="container">
     <div class="header">
       <h1>💖 Zot Spot 💖</h1>
-      <p class="subtitle">Find Period Products at UCI ✨</p>
+      <p class="subtitle"> Find Period Products at UCI ✨</p>
     </div>
 
-    <!-- Tiles -->
+    <!-- Mission Statement -->
+    <section class="mission-statement">
+      <h2>🌟 Our Mission</h2>
+      <p>Finding period products on campus shouldn't be a struggle or inaccessible. Too often, it's unclear which
+        bathrooms have them available or where to even start looking. Zot Spot aims to increase accessibility and ease
+        by helping you quickly locate free period products across campus – because no one should have to stress during
+        their period. </p>
+    </section>
+
+    <!-- Enhanced Tiles -->
     <section class="tile-grid">
-      <a href="{{ url_for('map_view') }}" class="tile">
-        <div class="tile-icon">📍</div>
-        <div class="tile-text">Find a Product</div>
+      <a href="{{ url_for('map_view') }}" class="tile map-tile">
+        <img src="{{ url_for('static', filename='images/find_a_product.jpg') }}" alt="Find Products"
+          class="tile-icon-img">
+        <div class="tile-text">Find Products</div>
+        <div class="map-preview"></div>
+        <div class="tile-description">Locate free period products near you on our interactive campus map</div>
       </a>
-      <a href="{{ url_for('map_view') }}#report" class="tile">
+
+      <!-- <a href="{{ url_for('map_view') }}#report" class="tile">
         <div class="tile-icon">📢</div>
-        <div class="tile-text">Report Low Stock</div>
+        <div class="tile-text">Report Stock</div>
+        <div class="tile-description">Help keep our community informed by reporting low or empty dispensers</div>
+      </a> -->
+
+      <a href="#resources" class="tile">
+        <img src="{{ url_for('static', filename='images/resources.jpg') }}" alt="Resources" class="tile-icon-img">
+        <div class="tile-text">Resources</div>
+        <div class="tile-description">Access helpful information, health resources, and period education materials</div>
       </a>
-      <a href="#contact" class="tile">
+
+      <!-- <a href="#contact" class="tile">
+        <img src="{{ url_for('static', filename='images/contact us.jpg') }}" alt="Contact Us" class="tile-icon-img"> -->
+      <a href="{{ url_for('contact') }}" class="tile">
         <div class="tile-icon">💬</div>
         <div class="tile-text">Contact Us</div>
+        <div class="tile-description">Get in touch with questions, suggestions, or to join our mission</div>
+      </a>
+      <a href="{{ url_for('resources') }}" class="tile">
+        <div class="tile-icon">📘</div>
+        <div class="tile-text">Resources</div>
       </a>
     </section>
+
+
+
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+      <h2>About Zot Spot</h2>
+      <div class="about-content">
+        <div class="about-card">
+          <h3>🎯 What We Do</h3>
+          <p>Zot Spot helps students at UC Irvine easily locate free period products across campus. By providing a
+            simple, student-friendly web app, we take the guesswork out of finding accessible menstrual resources—so you
+            can focus on what matters, not on searching bathroom to bathroom. </p>
+        </div>
+
+        <div class="about-card">
+          <h3>🤝 Community Driven</h3>
+          <p>Zot Spot is built by students, for students. We believe in mutual care and collective empowerment, and we
+            collaborate with campus organizations and student advocates to improve access, dignity, and support around
+            menstrual health. </p>
+        </div>
+
+        <div class="about-card">
+          <h3>🌱 Growing Impact</h3>
+          <p>What started as a small passion project is turning into a movement. With more locations added regularly and
+            feedback features to guide improvements, Zot Spot is committed to scaling its reach and helping UCI become a
+            more inclusive and compassionate place for everyone.</p>
+        </div>
+
+        <div class="about-card">
+          <h3>💡 Vision Forward</h3>
+          <p> We envision a campus where no one is left scrambling for period products. Our goal is to expand to more
+            universities, integrate real-time availability, and advocate for sustainable, stigma-free solutions—because
+            period equity isn’t a luxury; it’s a right. </p>
+        </div>
+      </div>
+    </section>
   </div>
+
+
+
+
+  </script>
 </body>
 
 </html>

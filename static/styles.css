@@ -1,4 +1,96 @@
+/* /resources */
+.back-btn {
+    display: inline-block;
+    margin: 2rem 0 1rem 2rem;
+    padding: 12px 28px;
+    background: linear-gradient(45deg, #ff6b9d, #ff8fa3);
+    color: #fff;
+    text-decoration: none;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    box-shadow: 0 4px 15px rgba(255, 107, 157, 0.18);
+    transition: all 0.2s;
+    letter-spacing: 1px;
+}
 
+.back-btn:hover {
+    background: linear-gradient(45deg, #ff8fa3, #ff6b9d);
+    transform: translateY(-2px) scale(1.04);
+    box-shadow: 0 8px 25px rgba(255, 107, 157, 0.28);
+    color: #fff;
+}
+
+body {
+    background: #ff9a9e;
+}
+
+.resources-container {
+    max-width: 700px;
+    margin: 2rem auto;
+    padding: 2rem;
+    /* background: #f9d1e1; */
+    border-radius: 16px;
+    /* box-shadow: 0 4px 16px rgba(200, 0, 118, 0.08); */
+}
+
+.resource-tile {
+    background: #ffe4f3;
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 2px 8px rgba(200, 0, 118, 0.06);
+    transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
+    display: block;
+    text-decoration: none;
+    color: #800080;
+    font-weight: 600;
+    position: relative;
+}
+
+.resource-tile:hover {
+    background: #ffd1ec;
+    box-shadow: 0 6px 24px rgba(200, 0, 118, 0.13);
+    transform: translateY(-2px) scale(1.02);
+    color: #c90076;
+    text-decoration: none;
+}
+
+.resource-tile span {
+    display: block;
+    color: #a05a9c;
+    font-weight: 400;
+    font-size: 0.98rem;
+    margin-top: 0.3rem;
+}
+
+h1 {
+    color: #c90076;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 1.2rem;
+}
+
+a.resource-link {
+    color: #800080;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+a.resource-link:hover {
+    color: #c90076;
+    text-decoration: underline;
+}
 
 /*  Bathrooms styling */
 .popup {

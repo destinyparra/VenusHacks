@@ -11,6 +11,9 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///period_products.db'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.secret_key = 'your_secret_key_here'
+
+
 db = SQLAlchemy(app)
 
 class Location(db.Model):
@@ -58,6 +61,12 @@ def update_stock(location_id):
 def map_view():
     return render_template('map.html')
 
+
+@app.route('/resources')
+def resources():
+    return render_template('resources.html')
+
+
 @app.route('/locations')
 def locations():
     all_locations = Location.query.all()
@@ -76,6 +85,13 @@ def locations():
     } for loc in all_locations]
     
     return jsonify(locations_data)
+
+
+@app.route('/contact')
+def contact():
+   return render_template('contact.html')
+
+
 
 
 if __name__ == '__main__':

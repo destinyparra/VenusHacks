@@ -440,7 +440,15 @@
 
 <body>
     <div class="floating-hearts" id="hearts"></div>
-
+    <nav class="navbar">
+        <div class="nav-logo">💖 Zot Spot</div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}" class="back-btn">Home</a>
+            <a href="{{ url_for('map_view') }}">Map</a>
+            <a href="{{ url_for('map_view') }}#report">Report</a>
+            <a href="#contact">Contact</a>
+        </div>
+    </nav>
     <div class="container">
         <div class="header">
             <h1>💖 Zot Spot 💖</h1>
@@ -493,15 +501,15 @@
 
                     for (const groupName in groups) {
                         const locations = groups[groupName];
-                        const {latitude, longitude} = locations[0];
+                        const { latitude, longitude } = locations[0];
                         const groupMarker = L.marker([latitude, longitude], { icon: myIcon }).addTo(map);
-                        
+
                         let floorOptions = `<option value="">Select Floor</option>`;
                         locations.forEach(loc => {
                             floorOptions += `<option value="${loc.id}">${loc.floor || loc.name}</option>`;
-                        });   
-                    
-                                    
+                        });
+
+
                         groupMarker.bindPopup(`
                             <div>
                             <strong>Group: ${groupName}</strong><br>
@@ -518,19 +526,19 @@
                             const detailsDiv = document.getElementById(`floor-details-${groupName}`);
 
                             selectEl.onchange = () => {
-                            const selectedID = selectEl.value;
-                            if (!selectedID) {
-                                detailsDiv.innerHTML = '';
-                                return;
-                            }
-                            const location = locations.find(l => l.id == selectedID);
-                            detailsDiv.innerHTML = renderView(location);
+                                const selectedID = selectEl.value;
+                                if (!selectedID) {
+                                    detailsDiv.innerHTML = '';
+                                    return;
+                                }
+                                const location = locations.find(l => l.id == selectedID);
+                                detailsDiv.innerHTML = renderView(location);
                             };
                         });
                     }
                     renderGroups(groups);
                 });
-            
+
             function renderGroups(groups) {
                 const container = document.getElementById('locations-container');
                 container.innerHTML = '';
@@ -613,7 +621,7 @@
             }
 
             function cancelEdit(id) {
-                document.getElementById(`edit-${id}`).style.display = 'none'; 
+                document.getElementById(`edit-${id}`).style.display = 'none';
                 document.getElementById(`view-${id}`).style.display = 'block';
             }
 
