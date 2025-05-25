@@ -423,6 +423,21 @@ h1 .emoji {
     overflow-x: hidden;
 }
 
+.map-page select {
+    min-width: 200px;
+    max-width: 250px;
+    width: 220px;
+    /* Adjust as needed */
+    padding: 0.5em 1em;
+    font-size: 1.1rem;
+    border-radius: 12px;
+    border: 2px solid var(--primary-pink);
+    font-family: inherit;
+    font-weight: bold;
+    background: #fff;
+    box-sizing: border-box;
+}
+
 
 
 .map-container {

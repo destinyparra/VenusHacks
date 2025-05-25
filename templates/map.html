@@ -259,39 +259,39 @@
                 });
         }
 
-        // comment out after testing
-        // Hardcoded user location for testing (UCI campus example)
-        userLat = 33.646, userLng = -117.842;
-
-        // Optionally, add a marker for the user
-        L.marker([userLat, userLng], { icon: userIcon })
-            .addTo(map)
-            .bindPopup('You are here')
-            .openPopup();
-
-        map.setView([userLat, userLng], 16);
-
-        // comment out after testing
+        // -------- for testing --------
+        // // Hardcoded user location for testing (UCI campus example)
+        // userLat = 33.646, userLng = -117.842;
 
 
-        // uncomment this section to enable geolocation functionality
+        // L.marker([userLat, userLng], { icon: userIcon })
+        //     .addTo(map)
+        //     .bindPopup('You are here')
+        //     .openPopup();
 
-        // if (navigator.geolocation) {
-        //     navigator.geolocation.getCurrentPosition(function (position) {
-        //         userLat = position.coords.latitude;
-        //         userLng = position.coords.longitude;
-        //         L.marker([userLat, userLng], { icon: userIcon })
-        //             .addTo(map)
-        //             .bindPopup('You are here')
-        //             .openPopup();
-        //         map.setView([userLat, userLng], 16);
-        //     }, function () {
-        //         alert('Geolocation failed. Please allow location access.');
-        //     });
-        // }
-        // else {
-        //     alert('Geolocation is not supported by this browser.');
-        // }
+        // map.setView([userLat, userLng], 16);
+        // -------- for testing --------
+
+
+        // comment out below if else for testing  
+        // get users current location using Geolocation API
+        // if geolocation is not supported or permission is denied, show an alert
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                userLat = position.coords.latitude;
+                userLng = position.coords.longitude;
+                L.marker([userLat, userLng], { icon: userIcon })
+                    .addTo(map)
+                    .bindPopup('You are here')
+                    .openPopup();
+                map.setView([userLat, userLng], 16);
+            }, function () {
+                alert('Geolocation failed. Please allow location access.');
+            });
+        }
+        else {
+            alert('Geolocation is not supported by this browser.');
+        }
 
     </script>
 
