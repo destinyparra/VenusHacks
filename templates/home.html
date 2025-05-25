@@ -166,17 +166,16 @@
 </head>
 
 <body>
-  <!-- Floating Hearts -->
   <div class="floating-hearts" id="hearts"></div>
 
-  <!-- Navbar -->
   <nav class="navbar">
     <div class="nav-logo">💖 Zot Spot</div>
     <div class="nav-links">
       <a href="#">Home</a>
       <a href="{{ url_for('map_view') }}">Map</a>
-      <a href="{{ url_for('map_view') }}#report">Report</a> <!-- ✅ fixed -->
+      <a href="{{ url_for('map_view') }}#report">Report</a>
       <a href="#about">About</a>
+      <a href="{{ url_for('contact') }}">Contact</a>
     </div>
   </nav>
 
@@ -187,7 +186,6 @@
       <p class="subtitle">Find Period Products at UCI ✨</p>
     </div>
 
-    <!-- Tiles -->
     <section class="tile-grid">
       <a href="{{ url_for('map_view') }}" class="tile">
         <div class="tile-icon">📍</div>
@@ -197,7 +195,7 @@
         <div class="tile-icon">📢</div>
         <div class="tile-text">Report Low Stock</div>
       </a>
-      <a href="#contact" class="tile">
+      <a href="{{ url_for('contact') }}" class="tile">
         <div class="tile-icon">💬</div>
         <div class="tile-text">Contact Us</div>
       </a>
