@@ -449,68 +449,75 @@
             <a href="#contact">Contact</a>
         </div>
     </nav>
-    <div class="container">
-        <div class="header">
-            <h1>💖 Zot Spot 💖</h1>
+    <!-- <div class="container"> -->
+    <div class="header">
+        <h1>💖 Zot Spot 💖</h1>
+    </div>
+
+    <a href="{{ url_for('home') }}" class="back-btn">
+        Back to Home
+    </a>
+
+    <div class="map-container">
+        <div class="controls">
+
         </div>
+        <div id="map"></div>
+    </div>
 
-        <a href="{{ url_for('home') }}" class="back-btn">
-            Back to Home
-        </a>
+    <!-- <div id="locations-container"></div> -->
 
-        <div class="map-container">
-            <div class="controls">
-
-            </div>
-            <div id="map"></div>
+    <div class="design-card">
+        <h2 class="design-title">Bathrooms Near Me</h2>
+        <div class="list-layout" id="building-list">
+            <!-- List items will be injected here by JS -->
         </div>
+    </div>
+    </div>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
+        var myIcon = L.icon({
+            iconUrl: 'static/images/tampon_icon.png',
+            iconSize: [40, 70],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76]
+        });
+        var userIcon = L.icon({
+            iconUrl: 'static/images/Woman_icon.png',
+            iconSize: [30, 50],
+            iconAnchor: [22, 94],
+            popupAnchor: [-3, -76]
+        });
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
 
-        <!-- <div id="locations-container"></div> -->
+        //display locations (by floor) and update-form for each location
+        fetch('/locations')
+            .then(response => response.json())
+            .then(data => {
+                const groups = {};
 
-        <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
-        <script>
-            var map = L.map('map').setView([33.645968217866574, -117.84270903384764], 16);
-            var myIcon = L.icon({
-                iconUrl: 'static/images/tampon_icon.png',
-                iconSize: [40, 70],
-                iconAnchor: [22, 94],
-                popupAnchor: [-3, -76]
-            });
-            var userIcon = L.icon({
-                iconUrl: 'static/images/Woman_icon.png',
-                iconSize: [30, 50],
-                iconAnchor: [22, 94],
-                popupAnchor: [-3, -76]
-            });
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+                data.forEach(location => {
+                    if (!groups[location.location_group]) {
+                        groups[location.location_group] = [];
+                    }
+                    groups[location.location_group].push(location);
+                });
 
-            //display locations (by floor) and update-form for each location
-            fetch('/locations')
-                .then(response => response.json())
-                .then(data => {
-                    const groups = {};
+                for (const groupName in groups) {
+                    const locations = groups[groupName];
+                    const { latitude, longitude } = locations[0];
+                    const groupMarker = L.marker([latitude, longitude], { icon: myIcon }).addTo(map);
 
-                    data.forEach(location => {
-                        if (!groups[location.location_group]) {
-                            groups[location.location_group] = [];
-                        }
-                        groups[location.location_group].push(location);
+                    let floorOptions = `<option value="">Select Floor</option>`;
+                    locations.forEach(loc => {
+                        floorOptions += `<option value="${loc.id}">${loc.floor || loc.name}</option>`;
                     });
 
-                    for (const groupName in groups) {
-                        const locations = groups[groupName];
-                        const { latitude, longitude } = locations[0];
-                        const groupMarker = L.marker([latitude, longitude], { icon: myIcon }).addTo(map);
 
-                        let floorOptions = `<option value="">Select Floor</option>`;
-                        locations.forEach(loc => {
-                            floorOptions += `<option value="${loc.id}">${loc.floor || loc.name}</option>`;
-                        });
-
-
-                        groupMarker.bindPopup(`
+                    groupMarker.bindPopup(`
                             <div>
                             <strong>Group: ${groupName}</strong><br>
                             <label for="floor-select-${groupName}">Choose Floor:</label><br>
@@ -521,64 +528,65 @@
                             </div>
                         `);
 
-                        groupMarker.on('popupopen', () => {
-                            const selectEl = document.getElementById(`floor-select-${groupName}`);
-                            const detailsDiv = document.getElementById(`floor-details-${groupName}`);
+                    groupMarker.on('popupopen', () => {
+                        const selectEl = document.getElementById(`floor-select-${groupName}`);
+                        const detailsDiv = document.getElementById(`floor-details-${groupName}`);
 
-                            selectEl.onchange = () => {
-                                const selectedID = selectEl.value;
-                                if (!selectedID) {
-                                    detailsDiv.innerHTML = '';
-                                    return;
-                                }
-                                const location = locations.find(l => l.id == selectedID);
-                                detailsDiv.innerHTML = renderView(location);
-                            };
-                        });
-                    }
-                    renderGroups(groups);
+                        selectEl.onchange = () => {
+                            const selectedID = selectEl.value;
+                            if (!selectedID) {
+                                detailsDiv.innerHTML = '';
+                                return;
+                            }
+                            const location = locations.find(l => l.id == selectedID);
+                            detailsDiv.innerHTML = renderView(location);
+                        };
+                    });
+                }
+                renderGroups(groups);
+            });
+
+        function renderGroups(groups) {
+            // const container = document.getElementById('locations-container');
+            const container = document.getElementById('building-list');
+            container.innerHTML = '';
+
+            for (const groupName in groups) {
+                const groupLocations = groups[groupName];
+
+                const groupDiv = document.createElement('div');
+                groupDiv.classList.add('location-group');
+
+                const title = document.createElement('h3');
+                title.textContent = `Group: ${groupName}`;
+                groupDiv.appendChild(title);
+
+                const floorSelect = document.createElement('select');
+                floorSelect.innerHTML = '<option value="">Select Floor</option>';
+
+                groupLocations.forEach(loc => {
+                    const option = document.createElement('option');
+                    option.value = loc.id;
+                    option.textContent = loc.floor || loc.name;
+                    floorSelect.appendChild(option);
                 });
 
-            function renderGroups(groups) {
-                const container = document.getElementById('locations-container');
-                container.innerHTML = '';
+                groupDiv.appendChild(floorSelect);
+                const detailsDiv = document.createElement('div');
+                detailsDiv.id = `details-${groupName}`;
+                groupDiv.appendChild(detailsDiv);
 
-                for (const groupName in groups) {
-                    const groupLocations = groups[groupName];
+                floorSelect.addEventListener('change', () => {
+                    const selectedID = floorSelect.value;
+                    const location = groupLocations.find(l => l.id == selectedID);
+                    detailsDiv.innerHTML = renderView(location);
+                });
 
-                    const groupDiv = document.createElement('div');
-                    groupDiv.classList.add('location-group');
-
-                    const title = document.createElement('h3');
-                    title.textContent = `Group: ${groupName}`;
-                    groupDiv.appendChild(title);
-
-                    const floorSelect = document.createElement('select');
-                    floorSelect.innerHTML = '<option value="">Select Floor</option>';
-
-                    groupLocations.forEach(loc => {
-                        const option = document.createElement('option');
-                        option.value = loc.id;
-                        option.textContent = loc.floor || loc.name;
-                        floorSelect.appendChild(option);
-                    });
-
-                    groupDiv.appendChild(floorSelect);
-                    const detailsDiv = document.createElement('div');
-                    detailsDiv.id = `details-${groupName}`;
-                    groupDiv.appendChild(detailsDiv);
-
-                    floorSelect.addEventListener('change', () => {
-                        const selectedID = floorSelect.value;
-                        const location = groupLocations.find(l => l.id == selectedID);
-                        detailsDiv.innerHTML = renderView(location);
-                    });
-
-                    container.appendChild(groupDiv);
-                }
+                container.appendChild(groupDiv);
             }
-            function renderView(location) {
-                return `
+        }
+        function renderView(location) {
+            return `
                 <div id="view-${location.id}">
                     <strong>${location.name}</strong><br>
                     Pads: ${location.pads_availability}<br>
@@ -589,15 +597,15 @@
                     <button onclick="showEditForm(${location.id},'${location.pads_availability}', '${location.tampons_availability}')">Update Stock</button>
                 </div>
                 <div id="edit-${location.id}" style="display:none;"></div>`;
-            }
+        }
 
-            function showEditForm(id, padsAvailability, tamponsAvailability) {
-                const viewDiv = document.getElementById(`view-${id}`);
-                const editDiv = document.getElementById(`edit-${id}`);
-                viewDiv.style.display = 'none';
-                //editDiv.style.display = 'block';
+        function showEditForm(id, padsAvailability, tamponsAvailability) {
+            const viewDiv = document.getElementById(`view-${id}`);
+            const editDiv = document.getElementById(`edit-${id}`);
+            viewDiv.style.display = 'none';
+            //editDiv.style.display = 'block';
 
-                editDiv.innerHTML = `
+            editDiv.innerHTML = `
                     <form onsubmit="submitUpdate(event, ${id})">
                         <label for="pads-${id}">Pads:</label>
                         <select id="pads-${id}">
@@ -617,58 +625,59 @@
                         <button onclick="cancelEdit(${id})">Cancel</button>
                     </form>
                 `;
-                editDiv.style.display = 'block';
-            }
+            editDiv.style.display = 'block';
+        }
 
-            function cancelEdit(id) {
-                document.getElementById(`edit-${id}`).style.display = 'none';
-                document.getElementById(`view-${id}`).style.display = 'block';
-            }
+        function cancelEdit(id) {
+            document.getElementById(`edit-${id}`).style.display = 'none';
+            document.getElementById(`view-${id}`).style.display = 'block';
+        }
 
-            function submitUpdate(event, id) {
-                event.preventDefault();
-                const pads = document.getElementById(`pads-${id}`).value;
-                const tampons = document.getElementById(`tampons-${id}`).value;
+        function submitUpdate(event, id) {
+            event.preventDefault();
+            const pads = document.getElementById(`pads-${id}`).value;
+            const tampons = document.getElementById(`tampons-${id}`).value;
 
-                fetch(`/update_stock/${id}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        pads_availability: pads,
-                        tampons_availability: tampons
-                    })
+            fetch(`/update_stock/${id}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    pads_availability: pads,
+                    tampons_availability: tampons
                 })
-                    .then(response => response.json())
-                    .then(result => {
-                        if (result.success) {
-                            location.reload();
-                        }
-                        else {
-                            alert('Update failed.');
-                        }
-                    });
-            }
-
-            //show user location
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(function (position) {
-                    var userLat = position.coords.latitude;
-                    var userLng = position.coords.longitude;
-                    L.marker([userLat, userLng], { icon: userIcon })
-                        .addTo(map)
-                        .bindPopup('You are here')
-                        .openPopup();
-                    map.setView([userLat, userLng], 16);
-                }, function () {
-                    alert('Geolocation failed. Please allow location access.');
+            })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.success) {
+                        location.reload();
+                    }
+                    else {
+                        alert('Update failed.');
+                    }
                 });
-            }
-            else {
-                alert('Geolocation is not supported by this browser.');
-            }
+        }
+
+        //show user location
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(function (position) {
+                var userLat = position.coords.latitude;
+                var userLng = position.coords.longitude;
+                L.marker([userLat, userLng], { icon: userIcon })
+                    .addTo(map)
+                    .bindPopup('You are here')
+                    .openPopup();
+                map.setView([userLat, userLng], 16);
+            }, function () {
+                alert('Geolocation failed. Please allow location access.');
+            });
+        }
+        else {
+            alert('Geolocation is not supported by this browser.');
+        }
 
 
-        </script>
+    </script>
+
 </body>
 
 </html>
