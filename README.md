@@ -8,7 +8,7 @@ We were inspired by the stress and uncertainty students often face when trying t
 Zot Spot is a web-based tool that helps students locate bathrooms on the UC Irvine campus that offer free period products. It displays an interactive map with real-time availability markers. Users can view bathroom locations, check stock levels for pads and tampons, and report when items are low or out of stock. The application also uses browser location services to help users find the nearest stocked bathroom and estimate walking time and distance.
 
 ## How we built it
-We built Zot Spot using Flask for the backend and Leaflet.js for the interactive campus map. Our data on bathrooms is stored in a SQLite database using Python, organized by building, floor, and room number. Each entry includes details like product availability for pads and tampons, whether the location is free, and when it was last updated.
+We built Zot Spot using **Python and micro web framework Flask** for the backend and **Leaflet.js** for the interactive campus map. Our data on bathrooms is stored in a SQLite database using Python, organized by building, floor, and room number. Each entry includes details like product availability for pads and tampons, whether the location is free, and when it was last updated.
 
 For the frontend, we used **HTML, CSS,** and **JavaScript**. We implemented geolocation so that users can see their location on the map, and we calculate both the distance to each bathroom and an estimated walking time based on a standard walking pace. This allows users to make quick, informed decisions without the need for step-by-step routing or external APIs.
 
