@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Resources | Zot Spot</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- <link rel="stylesheet" href="static/styles.css" /> -->
+
+</head>
+
+<body class="resources-page">
+
+    <nav class="navbar">
+        <div class="nav-logo">💖 Zot Spot</div>
+        <div class="nav-links">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a href="{{ url_for('map_view') }}">Map</a>
+            <a href="{{ url_for('home') }}#about">About</a>
+            <a href="{{ url_for('resources') }}">Resources</a>
+        </div>
+    </nav>
+    <a href="{{ url_for('home') }}" class="back-btn">
+        Back to Home
+    </a>
+
+    <div class="resources-container">
+        <h1>Helpful Resources</h1>
+
+        <ul>
+            <!-- UCI Women-Centered Resources -->
+            <li>
+                <a class="resource-tile" href="https://womxnscenter.uci.edu/" target="_blank">
+                    UCI Womxn’s Hub
+                    <span>Support and programs for womxn-identifying students at UCI.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://www.care.uci.edu/" target="_blank">
+                    UCI CARE (Campus Assault Resources & Education)
+                    <span>Confidential support for those affected by sexual and relationship violence.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://studentwellness.uci.edu/" target="_blank">
+                    UCI Student Wellness & Health Promotion
+                    <span>Health resources including reproductive health, wellness coaching, and peer programs.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://whcs.uci.edu/" target="_blank">
+                    UCI Division of Student Affairs: Wellness Resources
+                    <span>University-wide wellness initiatives, including mental, physical, and emotional health.</span>
+                </a>
+            </li>
+
+            <li>
+                <a class="resource-tile" href="https://www.plannedparenthood.org/" target="_blank">
+                    Planned Parenthood
+                    <span>Comprehensive sexual and reproductive health resources.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://www.womenshealth.gov/" target="_blank">
+                    Office on Women's Health
+                    <span>Trusted information on women's health topics.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://www.period.org/" target="_blank">
+                    PERIOD. The Menstrual Movement
+                    <span>Advocacy and resources for menstrual equity.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://www.uclahealth.org/programs/obgyn/our-services/menstrual-health"
+                    target="_blank">
+                    UCLA Health: Menstrual Health
+                    <span>Educational articles and support for menstrual health.</span>
+                </a>
+            </li>
+            <li>
+                <a class="resource-tile" href="https://www.samhsa.gov/find-help/national-helpline" target="_blank">
+                    SAMHSA National Helpline
+                    <span>Free, confidential help for mental health and substance use.</span>
+                </a>
+            </li>
+
+        </ul>
+    </div>
+</body>
+
+</html>
